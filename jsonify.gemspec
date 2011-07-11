@@ -6,10 +6,10 @@ Gem::Specification.new do |s|
   s.name        = "jsonify"
   s.version     = Jsonify::VERSION
   s.authors     = ["Bill Siggelkow"]
-  s.email       = ["bsiggelkow@mac.com"]
-  s.homepage    = ""
-  s.summary     = %q{TODO: Write a gem summary}
-  s.description = %q{TODO: Write a gem description}
+  s.email       = ["bsiggelkow@me.com"]
+  s.homepage    = "http://github.com/bsiggelkow/jsonify"
+  s.summary     = %q{Turn Ruby objects into JSON}
+  s.description = %q{Turn Ruby objects into JSON -- correctly!}
 
   s.rubyforge_project = "jsonify"
 
@@ -17,4 +17,8 @@ Gem::Specification.new do |s|
   s.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")
   s.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
   s.require_paths = ["lib"]
+
+  s.add_dependency 'json_pure'
+  s.add_development_dependency 'bundler'
+  s.add_development_dependency 'rspec'
 end
