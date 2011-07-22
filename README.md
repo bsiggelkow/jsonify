@@ -15,57 +15,62 @@ For XML representations, Rails makes this easy through its support of Builder te
 
 ___more coming soon___
 
+## Installation
+
+___coming soon___
 
 ## Usage
 
 ### Standalone
 
-  require 'jsonify'
-  json = Jsonify::Builder.new
+    require 'jsonify'
+    json = Jsonify::Builder.new
   
-  person = Struct.new(:first_name,:last_name).new('George','Burdell')
-  links = [
-    ['self',   'http://example.com/people/123'],
-    ['school', 'http://gatech.edu'],
-  ]
+    person = Struct.new(:first_name,:last_name).new('George','Burdell')
+    links = [
+      ['self',   'http://example.com/people/123'],
+      ['school', 'http://gatech.edu'],
+    ]
 
-  json.result do
-    json.alumnus do
-      json.fname person.first_name
-      json.lname person.last_name
-    end
-    json.links do
-      json.map!(links) do |link|
-        {:rel => link.first, :href => link.last}
+    json.result do
+      json.alumnus do
+        json.fname person.first_name
+        json.lname person.last_name
+      end
+      json.links do
+        json.map!(links) do |link|
+          {:rel => link.first, :href => link.last}
+        end
       end
     end
-  end
 
-  json.compile!
+    json.compile!
 
 Results in ...
 
-  {
-    "result": {
-      "alumnus": {
-        "fname": "George",
-        "lname": "Burdell"
-      },
-      "links": [
-        {
-          "rel": "self",
-          "href": "http://example.com/people/123"
+    {
+      "result": {
+        "alumnus": {
+          "fname": "George",
+          "lname": "Burdell"
         },
-        {
-          "rel": "school",
-          "href": "http://gatech.edu"
-        }
-      ]
+        "links": [
+          {
+            "rel": "self",
+            "href": "http://example.com/people/123"
+          },
+          {
+            "rel": "school",
+            "href": "http://gatech.edu"
+          }
+        ]
+      }
     }
-  }
 
 
 ### View Templates
+
+___coming soon___
 
 ## License
 
