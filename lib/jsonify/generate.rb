@@ -2,7 +2,7 @@ module Jsonify
   module Generate
 
     class << self
-
+      
       def value(val)
         case val
           when JsonValue; val
@@ -40,15 +40,15 @@ module Jsonify
       end
 
       def true_value
-        JsonTrue.new
+        @json_true ||= JsonTrue.new # memoize
       end
 
       def false_value
-        JsonFalse.new
+        @json_false ||= JsonFalse.new # memoize
       end
 
       def null_value
-        JsonNull.new
+        @json_null ||= JsonNull.new # memoize
       end
 
     end

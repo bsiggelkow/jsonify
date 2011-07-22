@@ -29,14 +29,17 @@ module Jsonify
       @values.values
     end
 
-    def add(json_pair)
-      @values.store(json_pair.key, json_pair)
+    def add(val)
+      raise ArgumentError.new("Cannot add #{val} to JsonOject") unless (Array === val || JsonPair === val)       
+      val = JsonPair.new(val.shift, val.length <= 1 ? val.first : val) if Array === val
+      @values.store(val.key, val)
     end
+
+    alias_method :<<, :add
+
   end
 
   class JsonArray < JsonValue
-    
-    alias_method :<<, :add
     
     def wrap(joined_values)
       "[#{joined_values}]"
@@ -50,6 +53,8 @@ module Jsonify
       end
       super(value)
     end
+
+    alias_method :<<, :add
     
   end
   
@@ -57,10 +62,10 @@ module Jsonify
     attr_accessor :key, :value
     def initialize(key, value=nil)
       @key = key.to_s
-      @value = value || JsonNull.new
+      @value = Generate.value(value)
     end
     def evaluate
-      %Q{\"#{key}\":#{value.evaluate}}
+      %Q{#{key.to_json}:#{value.evaluate}}
     end
   end
   
@@ -70,7 +75,7 @@ module Jsonify
       @value = value.to_s
     end
     def evaluate
-      "\"#{value}\""
+      value.to_json
     end
   end
   
