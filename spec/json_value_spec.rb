@@ -1,14 +1,14 @@
 require 'spec_helper'
 
 describe Jsonify::JsonValue do
-  describe Jsonify::JsonTuple do
-    let(:tuple) { Jsonify::JsonTuple.new('key',Jsonify::JsonString.new('value')) }
+  describe Jsonify::JsonPair do
+    let(:pair) { Jsonify::JsonPair.new('key',Jsonify::JsonString.new('value')) }
     it 'should be constructed of a key and value' do
-      tuple.key.should == 'key'
-      # tuple.value.should == 
+      pair.key.should == 'key'
+      # pair.value.should == 
     end
     it 'should evaluate to key:value' do
-      tuple.evaluate.should == "\"key\":\"value\""
+      pair.evaluate.should == "\"key\":\"value\""
     end
   end
   

@@ -1,22 +1,17 @@
 module Jsonify
   class JsonValue
     attr_accessor :values
+
     def initialize(values=nil)
       @values = values || []
     end
     
     def evaluate
-      wrap( 
-        (values.map {|v| v.evaluate}).join(',')
-      )
-    end
-    
-    def wrap(joined_values)
-      joined_values
+      wrap values.map {|v| v.evaluate}.join(',')
     end
     
     def add(jsonValue)
-      values << jsonValue
+      values << Generate.value(jsonValue)
     end
 
   end
@@ -25,40 +20,45 @@ module Jsonify
     def initialize(values=nil)
       @values = values || {}
     end
+
     def wrap(joined_values)
       "{#{joined_values}}"
     end
-    def evaluate
-      wrap( 
-        (values.values.map {|v| v.evaluate}).join(',')
-      )
+
+    def values
+      @values.values
     end
-    def add(json_tuple)
-      @values.store(json_tuple.key, json_tuple)
+
+    def add(json_pair)
+      @values.store(json_pair.key, json_pair)
     end
   end
 
   class JsonArray < JsonValue
+    
+    alias_method :<<, :add
+    
     def wrap(joined_values)
       "[#{joined_values}]"
     end
     
-    def add(jsonValue)
-      values.add(jsonValue)
-    end 
+    def add(value)
+      if JsonPair === value # wrap JsonPair in a JsonObject
+        object = JsonObject.new
+        object.add value
+        value = object
+      end
+      super(value)
+    end
+    
   end
   
-  class JsonTuple < JsonValue
+  class JsonPair < JsonValue
     attr_accessor :key, :value
-    def initialize(key, value)
+    def initialize(key, value=nil)
       @key = key.to_s
-      @value = value
+      @value = value || JsonNull.new
     end
-
-    def add(jsonValue)
-      value.add(jsonValue)
-    end
-
     def evaluate
       %Q{\"#{key}\":#{value.evaluate}}
     end
