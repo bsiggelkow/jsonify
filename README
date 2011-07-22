@@ -1,3 +1,0 @@
-The goal of Jsonify is to create a JSON Builder, akin to Jim Weirich's
-most excellent XML::Builder, that makes building JSON structures from Ruby
-objects simple, complete, and, most of all, correct.
