@@ -51,7 +51,7 @@ gem install jsonify
 ```
 
 Results in ...
-```ruby
+
     {
       "result": {
         "alumnus": {
@@ -70,7 +70,6 @@ Results in ...
         ]
       }
     }
-```
 
 ### View Templates
 
