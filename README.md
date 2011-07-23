@@ -23,53 +23,55 @@ gem install jsonify
 
 ### Standalone
 ```ruby
-  # Create some objects that represent a person and associated hyperlinks
-  person = Struct.new(:first_name,:last_name).new('George','Burdell')
-  links = [
-    ['self',   'http://example.com/people/123'],
-    ['school', 'http://gatech.edu'],
-  ]
+# Create some objects that represent a person and associated hyperlinks
+person = Struct.new(:first_name,:last_name).new('George','Burdell')
+links = [
+  ['self',   'http://example.com/people/123'],
+  ['school', 'http://gatech.edu'],
+]
 
-  # Build this information as JSON
-  require 'jsonify'
-  json = Jsonify::Builder.new(:pretty => true)
+# Build this information as JSON
+require 'jsonify'
+json = Jsonify::Builder.new(:pretty => true)
 
-  json.result do
-    json.alumnus do
-      json.fname person.first_name
-      json.lname person.last_name
-    end
-    json.links do
-      json.map!(links) do |link|
-        {:rel => link.first, :href => link.last}
-      end
+json.result do
+  json.alumnus do
+    json.fname person.first_name
+    json.lname person.last_name
+  end
+  json.links do
+    json.map!(links) do |link|
+      {:rel => link.first, :href => link.last}
     end
   end
+end
 
-  # Evaluate the result to a string
-  json.compile!
+# Evaluate the result to a string
+json.compile!
 ```
 
 Results in ...
 
-    {
-      "result": {
-        "alumnus": {
-          "fname": "George",
-          "lname": "Burdell"
-        },
-        "links": [
-          {
-            "rel": "self",
-            "href": "http://example.com/people/123"
-          },
-          {
-            "rel": "school",
-            "href": "http://gatech.edu"
-          }
-        ]
+```
+{
+  "result": {
+    "alumnus": {
+      "fname": "George",
+      "lname": "Burdell"
+    },
+    "links": [
+      {
+        "rel": "self",
+        "href": "http://example.com/people/123"
+      },
+      {
+        "rel": "school",
+        "href": "http://gatech.edu"
       }
-    }
+    ]
+  }
+}
+```
 
 ### View Templates
 
@@ -78,9 +80,9 @@ Jsonify includes Rails 3 template handler. Rails will handle any template with a
 The Jsonify::Builder is exposed as ___json___ as in the following example:
 
 ```ruby
-    json.hello do
-      json.world "Jsonify is Working!"
-    end
+json.hello do
+  json.world "Jsonify is Working!"
+end
 ```
 
 ## Roadmap
