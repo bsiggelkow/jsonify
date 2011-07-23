@@ -81,6 +81,15 @@ The Jsonify::Builder is exposed as ___json___ as in the following example:
       json.world "Jsonify is Working!"
     end
 
+
+## Roadmap
+
+1. Get folks interested
+1. Add additional documentation (both README and YARD)
+1. Add top-level "<<" method for general appending
+1. Split Rails template handling into separate gem
+1. Add support for Sinatra and Padrino (maybe separate gems)
+
 ## License
 
 This project is released under the MIT license.
