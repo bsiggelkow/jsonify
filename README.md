@@ -22,32 +22,33 @@ gem install jsonify
 ## Usage
 
 ### Standalone
-    #!ruby
-    # Create some objects that represent a person and associated hyperlinks
-    person = Struct.new(:first_name,:last_name).new('George','Burdell')
-    links = [
-      ['self',   'http://example.com/people/123'],
-      ['school', 'http://gatech.edu'],
-    ]
+```ruby
+  # Create some objects that represent a person and associated hyperlinks
+  person = Struct.new(:first_name,:last_name).new('George','Burdell')
+  links = [
+    ['self',   'http://example.com/people/123'],
+    ['school', 'http://gatech.edu'],
+  ]
 
-    # Build this information as JSON
-    require 'jsonify'
-    json = Jsonify::Builder.new(:pretty => true)
-  
-    json.result do
-      json.alumnus do
-        json.fname person.first_name
-        json.lname person.last_name
-      end
-      json.links do
-        json.map!(links) do |link|
-          {:rel => link.first, :href => link.last}
-        end
+  # Build this information as JSON
+  require 'jsonify'
+  json = Jsonify::Builder.new(:pretty => true)
+
+  json.result do
+    json.alumnus do
+      json.fname person.first_name
+      json.lname person.last_name
+    end
+    json.links do
+      json.map!(links) do |link|
+        {:rel => link.first, :href => link.last}
       end
     end
+  end
 
-    # Evaluate the result to a string
-    json.compile!
+  # Evaluate the result to a string
+  json.compile!
+```
 
 Results in ...
   
