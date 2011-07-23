@@ -51,7 +51,7 @@ gem install jsonify
 ```
 
 Results in ...
-```javascript  
+```ruby
     {
       "result": {
         "alumnus": {
