@@ -51,7 +51,7 @@ gem install jsonify
 ```
 
 Results in ...
-  
+```javascript  
     {
       "result": {
         "alumnus": {
@@ -70,18 +70,18 @@ Results in ...
         ]
       }
     }
-
+```
 
 ### View Templates
 
 Jsonify includes Rails 3 template handler. Rails will handle any template with a ___.jsonify___ extension with Jsonify.
 
 The Jsonify::Builder is exposed as ___json___ as in the following example:
-
+```ruby
     json.hello do
       json.world "Jsonify is Working!"
     end
-
+```
 
 ## Roadmap
 
