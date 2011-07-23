@@ -17,7 +17,7 @@ ___more coming soon___
 
 ## Installation
 
-___coming soon___
+gem install jsonify
 
 ## Usage
 
