@@ -23,15 +23,17 @@ ___coming soon___
 
 ### Standalone
 
-    require 'jsonify'
-    json = Jsonify::Builder.new
-  
+    # Create some objects that represent a person and associated hyperlinks
     person = Struct.new(:first_name,:last_name).new('George','Burdell')
     links = [
       ['self',   'http://example.com/people/123'],
       ['school', 'http://gatech.edu'],
     ]
 
+    # Build this information as JSON
+    require 'jsonify'
+    json = Jsonify::Builder.new(:pretty => true)
+  
     json.result do
       json.alumnus do
         json.fname person.first_name
@@ -44,6 +46,7 @@ ___coming soon___
       end
     end
 
+    # Evaluate the result to a string
     json.compile!
 
 Results in ...

@@ -28,11 +28,34 @@ describe Jsonify::Builder do
         lambda{ json.compile! }.should raise_error(JSON::ParserError)
       end
     end
-    describe 'with unicode characters' do
-      it 'properly encode' do
+    describe 'unicode characters' do
+      it 'should properly encode' do
         json = Jsonify::Builder.new(:verify => true)
         json.foo 'bar'.concat(16)
         lambda { json.compile! }.should_not raise_error
+      end
+    end
+    describe "pretty printing" do
+      it "should not be pretty by default" do
+        json.foo do
+          json.bar 'baz'
+        end
+        non_pretty_results = '{"foo":{"bar":"baz"}}'
+        json.compile!.should == non_pretty_results
+      end
+      it "should be pretty when asked for" do
+        json = Jsonify::Builder.new(:pretty => true)
+        json.foo do
+          json.bar 'baz'
+        end
+        pretty_results = <<PRETTY_JSON
+{
+  "foo": {
+    "bar": "baz"
+  }
+}
+PRETTY_JSON
+        json.compile!.should == pretty_results.chomp
       end
     end
   end

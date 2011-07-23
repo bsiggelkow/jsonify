@@ -3,6 +3,7 @@ module Jsonify
 
     def initialize(options={})
       @verify = options[:verify].nil? ? false : options[:verify] 
+      @pretty = options[:pretty].nil? ? false : options[:pretty] 
       reset!
     end
     
@@ -19,7 +20,7 @@ module Jsonify
     def compile!
       result = (@stack[0] ? @stack[0].evaluate : {}.to_json)
       JSON.parse(result) if @verify
-      result
+      @pretty ? JSON.pretty_generate(JSON.parse(result)) : result
     end
     
     def add!(value)
