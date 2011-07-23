@@ -22,7 +22,7 @@ gem install jsonify
 ## Usage
 
 ### Standalone
-
+    #!ruby
     # Create some objects that represent a person and associated hyperlinks
     person = Struct.new(:first_name,:last_name).new('George','Burdell')
     links = [
@@ -50,7 +50,7 @@ gem install jsonify
     json.compile!
 
 Results in ...
-
+  
     {
       "result": {
         "alumnus": {
