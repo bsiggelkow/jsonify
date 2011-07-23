@@ -11,14 +11,16 @@ Gem::Specification.new do |s|
   s.summary     = %q{Turn Ruby objects into JSON}
   s.description = %q{Turn Ruby objects into JSON -- correctly!}
 
-  s.rubyforge_project = "jsonify"
+  s.rubyforge_project = s.name
 
   s.files         = `git ls-files`.split("\n")
   s.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")
   s.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
   s.require_paths = ["lib"]
 
-  s.add_dependency 'json_pure'
+  s.add_dependency 'json'
+  s.add_dependency "actionpack", "~> 3.0.0"
+
   s.add_development_dependency 'bundler'
   s.add_development_dependency 'rake'
   s.add_development_dependency 'rspec'
