@@ -23,9 +23,11 @@ module Jsonify
       @pretty ? JSON.pretty_generate(JSON.parse(result)) : result
     end
     
-    def add!(value)
-      __current.add Generate.value(value)
+    def add!(*args)
+      __current.add *args
     end
+    
+    alias_method :<<, :add!
     
     def method_missing(sym, *args, &block)
       if block        
@@ -37,7 +39,7 @@ module Jsonify
         @level -= 1
       else
         if sym && args && args.length > 0
-          __current.add Generate.pair_value(sym, args.length > 1 ? args : args.first)
+          __current.add( sym, args.length > 1 ? args : args.first )
         end
         __current
       end

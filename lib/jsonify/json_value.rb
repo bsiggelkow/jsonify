@@ -29,13 +29,13 @@ module Jsonify
       @values.values
     end
 
-    def add(val)
-      raise ArgumentError.new("Cannot add #{val} to JsonOject") unless (Array === val || JsonPair === val)       
-      val = JsonPair.new(val.shift, val.length <= 1 ? val.first : val) if Array === val
-      @values.store(val.key, val)
+    def add(key, val=nil)
+      pair = (JsonPair === key) ? key : JsonPair.new(key, val)
+      @values.store(pair.key, pair)
     end
 
     alias_method :<<, :add
+    alias_method :add!, :add # for consistency with the Builder api
 
   end
 
@@ -55,6 +55,7 @@ module Jsonify
     end
 
     alias_method :<<, :add
+    alias_method :add!, :add # for consistency with the Builder api
     
   end
   

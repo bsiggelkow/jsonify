@@ -88,15 +88,15 @@ PRETTY_JSON
   describe 'objects' do
     it 'simple object should work' do
       json.object! do |obj|
-        obj << [:foo,:bar]
-        obj << [:go, :far]
+        obj.add :foo,:bar
+        obj.add :go, :far
       end
       json.compile!.should ==  "{\"foo\":\"bar\",\"go\":\"far\"}"
     end
-    it 'should treat the first element of an array as a key' do
+    it 'should handle arrays' do
       json.object! do |obj|
-        obj << [1, 2, 3]
-        obj << [4, 5]
+        obj.add 1, [2, 3]
+        obj.add 4, 5
       end
       json.compile!.should ==  '{"1":[2,3],"4":5}'
     end
