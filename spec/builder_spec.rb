@@ -103,7 +103,14 @@ PRETTY_JSON
   end
   
   describe 'using blocks' do
-    
+    it 'should allow names with spaces using tag!' do
+      json.tag!("foo foo") do
+        json.tag!("bar bar") do
+          json.tag!('buzz buzz','goo goo')
+        end
+      end
+      json.compile!.should == "{\"foo foo\":{\"bar bar\":{\"buzz buzz\":\"goo goo\"}}}"
+    end
     it 'complex hash' do
       json.foo do
         json.bar do
