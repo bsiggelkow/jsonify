@@ -78,11 +78,12 @@ The Jsonify template handler exposes the +Jsonify::Builder+ instance to your tem
       json.world "Jsonify is Working!"
     end
 
+## TODOs
+1. Consider simplified means of creating arrays (e.g. json.links(@links) {|link| ...})
+1. Benchmark performance
+
 ## Roadmap
 
-1. Get folks interested
-1. Benchmark performance
-1. Add additional documentation (both README and YARD)
 1. Split Rails template handling into separate gem
 1. Add support for Sinatra and Padrino (maybe separate gems)
 
