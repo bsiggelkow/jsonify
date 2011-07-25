@@ -78,8 +78,8 @@ PRETTY_JSON
     end
     it 'array of hashes should work' do
       json.array! do |ary|
-        ary << {foo: :bar}
-        ary << {go:  :far}
+        ary << {:foo => :bar}
+        ary << {:go  => :far}
       end
       json.compile!.should == "[{\"foo\":\"bar\"},{\"go\":\"far\"}]"
     end
@@ -185,7 +185,7 @@ PRETTY_JSON
         json.links do
           json.array! do |ary|
             links.each do |link|
-              ary << { href: link.url, rel: link.type}
+              ary << { :href => link.url, :rel => link.type}
             end
           end
         end
@@ -203,7 +203,7 @@ PRETTY_JSON
           end
           json.links do
             json.send(method,links) do |link|
-              { href: link.url, rel: link.type}
+              { :href => link.url, :rel => link.type}
             end
           end
         end
