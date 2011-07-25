@@ -81,6 +81,7 @@ The Jsonify template handler exposes the +Jsonify::Builder+ instance to your tem
 ## Roadmap
 
 1. Get folks interested
+1. Benchmark performance
 1. Add additional documentation (both README and YARD)
 1. Split Rails template handling into separate gem
 1. Add support for Sinatra and Padrino (maybe separate gems)
