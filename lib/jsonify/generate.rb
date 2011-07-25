@@ -1,8 +1,23 @@
 module Jsonify
+  
+  # Provides a set of functions for creating JsonValues from Ruby objects.
   module Generate
 
     class << self
-      
+
+      # Coerces the given value into a JsonValue.
+      #
+      # The coercion rules are based on the type (class) of the value as follows:
+      # - +JsonValue+ => no coercion
+      # - +String+    => JsonString ( \"foo\" )
+      # - +Numeric+   => JsonNumber ( 1 )
+      # - +TrueClass+ => JsonTrue   ( true )
+      # - +FalseClass+=> JsonFalse  ( false )
+      # - +NilClass+  => JsonNull   ( null )
+      # - +Array+     => JsonArray  ( [1,2,3] )
+      # - +Hash+      => JsonObject ( <code>{"\a":1,\"b\":2}</code> )
+      # 
+      # @param val value to coerce into a JsonValue.
       def value(val)
         case val
           when JsonValue; val
