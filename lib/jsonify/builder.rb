@@ -49,22 +49,41 @@ module Jsonify
     
     alias_method :<<, :add!
 
-    # Adds a new JsonPair to the builder. This method will be called if the name does not match an existing method name.
+    # Adds a new JsonPair to the builder. 
+    # This method will be called if the name does not match an existing method name.
+    #
+    # @param *args [Array] iterates over the given array yielding each array item to the block; the result of which is added to a JsonArray
     # see tag!
     def method_missing(sym, *args, &block)
-      if block        
-        pair = Generate.pair_value(sym)
-        __current.add(pair)
-        @level += 1
-          block.call(self)
-          pair.value = __current
-        @level -= 1
-      else
-        if sym && args && args.length > 0
-          __current.add( sym, args.length > 1 ? args : args.first )
+      
+      # When no block given, simply add the symbol and arg as key - value for a JsonPair to current
+      return __current.add( sym, args.length > 1 ? args : args.first ) unless block
+
+      # Create a JSON pair and add it to the current object
+      pair = Generate.pair_value(sym) 
+      __current.add(pair)
+
+      # Now process the block
+      @level += 1
+
+      unless args.empty?
+        # Argument was given, iterate over it and add result to a JsonArray
+        __set_current JsonArray.new
+        args.first.each do |arg|
+          __current.add block.call(arg)
         end
-        __current
+      else
+        # No argument was given; ordinary JsonObject is expected
+        block.call(self)
       end
+
+      # Set the value on the pair to current
+      pair.value = __current
+
+      # Pop current off the top of the stack; we are done with it at this point
+      @stack.pop
+
+      @level -= 1
     end
     
     # Sets the object at the top of the stack to a new JsonObject, which is yielded to the block.

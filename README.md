@@ -23,8 +23,8 @@ gem install jsonify
 
 ### Standalone
     # Create some objects that represent a person and associated hyperlinks
-    person = Struct.new(:first_name,:last_name).new('George','Burdell')
-    links = [
+    @person = Struct.new(:first_name,:last_name).new('George','Burdell')
+    @links = [
       ['self',   'http://example.com/people/123'],
       ['school', 'http://gatech.edu'],
     ]
@@ -35,13 +35,11 @@ gem install jsonify
 
     json.result do
       json.alumnus do
-        json.fname person.first_name
-        json.lname person.last_name
+        json.fname @person.first_name
+        json.lname @person.last_name
       end
-      json.links do
-        json.map!(links) do |link|
-          {:rel => link.first, :href => link.last}
-        end
+      json.links(@links) do |link|
+        {:rel => link.first, :href => link.last}
       end
     end
 
@@ -72,11 +70,19 @@ Results in ...
 ### View Templates
 
 Jsonify includes Rails 3 template handler. Rails will handle any template with a ___.jsonify___ extension with Jsonify.
-The Jsonify template handler exposes the +Jsonify::Builder+ instance to your template with the ___json___ variable as in the following example:
+The Jsonify template handler exposes the `Jsonify::Builder` instance to your template with the `json` variable as in the following example:
 
     json.hello do
       json.world "Jsonify is Working!"
     end
+
+## Documentation
+
+[Jsonify Yard Docs](http://rubydoc.info/github/bsiggelkow/jsonify/master/frames)
+
+## Build Status
+
+[Compliments of Travis](http://travis-ci.org/bsiggelkow/jsonify)
 
 ## TODOs
 1. Consider simplified means of creating arrays (e.g. json.links(@links) {|link| ...})

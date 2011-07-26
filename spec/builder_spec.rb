@@ -103,6 +103,7 @@ PRETTY_JSON
   end
   
   describe 'using blocks' do
+
     it 'should allow names with spaces using tag!' do
       json.tag!("foo foo") do
         json.tag!("bar bar") do
@@ -111,6 +112,7 @@ PRETTY_JSON
       end
       json.compile!.should == "{\"foo foo\":{\"bar bar\":{\"buzz buzz\":\"goo goo\"}}}"
     end
+
     it 'complex hash' do
       json.foo do
         json.bar do
@@ -119,12 +121,14 @@ PRETTY_JSON
       end
       json.compile!.should == "{\"foo\":{\"bar\":{\"baz\":\"goo\"}}}"
     end
+
     it 'simple hash' do
       json.foo do
         json.baz :goo
       end
       json.compile!.should == "{\"foo\":{\"baz\":\"goo\"}}"
     end
+
     it 'hash with array' do
       json.foo do
         json.array! do |ary|
@@ -133,6 +137,14 @@ PRETTY_JSON
         end
       end
       json.compile!.should == "{\"foo\":[1,2]}"
+    end
+    
+    it 'hash with array by iteration' do
+      ary = [1,2,3]
+      json.foo(ary) do |n|
+        n * 2
+      end 
+      json.compile!.should ==  "{\"foo\":[2,4,6]}"
     end
     
     it 'simple array with object' do
@@ -160,12 +172,21 @@ PRETTY_JSON
   end
   
   describe 'without blocks' do
+
     describe 'complex array' do
       it 'should work' do
         json.bar [1,2,{:foo => 'goo'}]
         json.compile!.should == "{\"bar\":[1,2,{\"foo\":\"goo\"}]}"
       end
     end
+
+    describe 'object with null' do
+      it 'should handle missing argument' do
+        json.foo
+        json.compile!.should == '{"foo":null}'
+      end
+    end
+    
   end
   
   describe 'super complex example' do
@@ -182,12 +203,8 @@ PRETTY_JSON
           json.fname 'George'
           json.lname 'Burdell'
         end
-        json.links do
-          json.array! do |ary|
-            links.each do |link|
-              ary << { :href => link.url, :rel => link.type}
-            end
-          end
+        json.links(links) do |link|
+          { :href => link.url, :rel => link.type}
         end
       end
       expected = "{\"result\":{\"person\":{\"fname\":\"George\",\"lname\":\"Burdell\"},\"links\":[{\"href\":\"example.com\",\"rel\":\"self\"},{\"href\":\"foo.com\",\"rel\":\"parent\"}]}}"
