@@ -1,8 +1,6 @@
-# Jsonify
+# Jsonify -- a builder for JSON <a href="http://travis-ci.org/bsiggelkow/jsonify"><img src="https://secure.travis-ci.org/bsiggelkow/jsonify.png" alt=""></a>
 
-[Jsonify](https://github.com/bsiggelkow/jsonify) -- a builder for JSON <a href="http://travis-ci.org/bsiggelkow/jsonify"><img src="https://secure.travis-ci.org/bsiggelkow/jsonify.png" alt=""></a>
-
-Jsonify is to JSON as [Builder](https://github.com/jimweirich/builder) is to XML.
+[Jsonify](https://github.com/bsiggelkow/jsonify) is to JSON as [Builder](https://github.com/jimweirich/builder) is to XML.
 
 ## Goal
 
@@ -21,18 +19,15 @@ Nevertheless, this forces the developer to place this code into the model when i
 
 When someone asks "Where are the model representations defined?", I don't want to have to say "Well, look in the views folder for XML, but you have to look at the code in the model for the JSON format."
 
-There are other good libraries available that help solve this problem, such as Tokamak and RABL, that allow the developer to specify the representation in one format that is then interpreted into the wanted format at runtime.
-Please take a look at these projects when you consider alternatives; however, its my opinion that they are substantial and inherent differences between XML and JSON.
+There are a number of <a href='#related'>other libraries</a> available that try to solve this problem. Some take a similar approach to Jsonify and provide a builder-style interface.
+Others allow the developer to specify the representation using a common DSL that can generate both JSON and XML.
+Please take a look at these projects when you consider alternatives. It's my opinion that there are substantial and inherent differences between XML and JSON; and that these differences may force the developer to make concessions in one format or the other.
 
-These differences may force the developer make concessions in one format to make the other format correct.
-
-But an even greater motivation for me was emulating the simplicity of Builder. I have not found a single framework for JSON that provides the simplicity and elegance of Builder. Jsonify is my attempt at remedying that situation.
-
-___more coming soon___
+But an even greater motivation for me was emulating the simplicity of [Builder](https://github.com/jimweirich/builder). I have not found a single framework for JSON that provides the simplicity and elegance of Builder. Jsonify is my attempt at remedying that situation.
 
 ## Installation
 
-gem install jsonify
+`gem install jsonify`
 
 ## Usage
 
@@ -95,13 +90,16 @@ The Jsonify template handler exposes the `Jsonify::Builder` instance to your tem
 
 [Yard Docs](http://rubydoc.info/github/bsiggelkow/jsonify/master/frames)
 
-## Build Status
+<h2 id='related'>Related Projects</h2>
 
-[Travis](http://travis-ci.org/bsiggelkow/jsonify)
+- [Argonaut](https://github.com/jbr/argonaut)
+- [JSON Builder](https://github.com/dewski/json_builder)
+- [RABL](https://github.com/nesquena/rabl)
+- [Tokamak](https://github.com/abril/tokamak)
 
 ## TODOs
-1. Consider simplified means of creating arrays (e.g. json.links(@links) {|link| ...})
 1. Benchmark performance
+1. Document how partials can be used
 
 ## Roadmap
 
