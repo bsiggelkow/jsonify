@@ -90,8 +90,7 @@ The Jsonify template handler exposes the `Jsonify::Builder` instance to your tem
 
 [Yard Docs](http://rubydoc.info/github/bsiggelkow/jsonify/master/frames)
 
-<a id='related'></a>
-<h2>Related Projects</h2>
+<h2 name='related'>Related Projects</h2>
 - [Argonaut](https://github.com/jbr/argonaut)
 - [JSON Builder](https://github.com/dewski/json_builder)
 - [RABL](https://github.com/nesquena/rabl)
