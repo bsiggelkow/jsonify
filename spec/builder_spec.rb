@@ -17,14 +17,19 @@ describe Jsonify::Builder do
     end
     describe 'with verify set' do
       it 'should report a parse error if the result is not parseable' do
-        json = Jsonify::Builder.new(:verify => true)
+
         # Hackery to come up with a failing case
+        class TestBuilder < Jsonify::Builder
+          attr_accessor :stack
+        end
         class FooBar
           def evaluate
             "foobar"
           end
         end
-        json.instance_variable_set(:@stack, [FooBar.new])
+
+        json = TestBuilder.new(:verify => true)
+        json.stack << FooBar.new
         lambda{ json.compile! }.should raise_error(JSON::ParserError)
       end
     end
@@ -167,7 +172,8 @@ PRETTY_JSON
           end
         end
       end
-      json.compile!.should == "{\"foo\":{\"bar\":{\"baz\":\"goo\",\"years\":[2011,2012]}}}"
+      expected = "{\"foo\":{\"bar\":{\"baz\":\"goo\",\"years\":[2011,2012]}}}"
+      JSON.parse(json.compile!).should == JSON.parse(expected)
     end
   end
   
@@ -208,25 +214,23 @@ PRETTY_JSON
         end
       end
       expected = "{\"result\":{\"person\":{\"fname\":\"George\",\"lname\":\"Burdell\"},\"links\":[{\"href\":\"example.com\",\"rel\":\"self\"},{\"href\":\"foo.com\",\"rel\":\"parent\"}]}}"
-      json.compile!.should == expected
+      JSON.parse(json.compile!).should == JSON.parse(expected)
     end
 
-    [:map!, :collect!].each do |method|
-      it "should work using #{method} with argument" do
-        json.result do
-          json.person do
-            json.fname 'George'
-            json.lname 'Burdell'
-          end
-          json.links do
-            json.send(method,links) do |link|
-              { :href => link.url, :rel => link.type}
-            end
+    it "should work using map! with argument" do
+      json.result do
+        json.person do
+          json.fname 'George'
+          json.lname 'Burdell'
+        end
+        json.links do
+          json.map!(links) do |link|
+            { :href => link.url, :rel => link.type}
           end
         end
-        expected = "{\"result\":{\"person\":{\"fname\":\"George\",\"lname\":\"Burdell\"},\"links\":[{\"href\":\"example.com\",\"rel\":\"self\"},{\"href\":\"foo.com\",\"rel\":\"parent\"}]}}"
-        json.compile!.should == expected
       end
+      expected = "{\"result\":{\"person\":{\"fname\":\"George\",\"lname\":\"Burdell\"},\"links\":[{\"href\":\"example.com\",\"rel\":\"self\"},{\"href\":\"foo.com\",\"rel\":\"parent\"}]}}"
+      JSON.parse(json.compile!).should == JSON.parse(expected)
     end
   end
   

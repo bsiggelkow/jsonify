@@ -12,7 +12,8 @@ describe Jsonify::Generate do
   it 'should build json' do
     json = Jsonify::Generate
     result = json.value links
-    result.evaluate.should == '{"links":[{"rel":"foo","href":"goo"},{"rel":"bar","href":"baz"}]}'
+    expected = '{"links":[{"rel":"foo","href":"goo"},{"rel":"bar","href":"baz"}]}'
+    JSON.parse(result.evaluate).should == JSON.parse(expected)
   end
 
   describe 'complex example' do
@@ -27,7 +28,8 @@ describe Jsonify::Generate do
           ])
         }
       )
-      json.evaluate.should == "{\"links\":[{\"rel\":\"foo\",\"href\":\"goo\"},{\"rel\":\"bar\",\"href\":\"baz\"}]}"
+      expected = "{\"links\":[{\"rel\":\"foo\",\"href\":\"goo\"},{\"rel\":\"bar\",\"href\":\"baz\"}]}"
+      JSON.parse(json.evaluate).should == JSON.parse(expected)
     end
   end
 end
