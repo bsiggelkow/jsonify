@@ -19,11 +19,10 @@ module Jsonify
     end
 
     # Adds a new JsonPair to the builder. Use this method if the pair "key" has spaces or other characters that prohibit creation via method_missing.
-    # If a block is given, the result of that block will be set as the value for the JSON pair.
     #
     # @param sym [String] the key for the pair
-    # @param *args [arguments] the value(s) used for the value of the pair; +args+ are ignored if a block is passed.
-    # @param &block a code block the result of which will be set as the value for the JSON pair
+    # @param *args [arguments] If a block is passed, the first argument will be iterated over and the subsequent result will be added to a JSON array; otherwise, the arguments set value for the `JsonPair`
+    # @param &block a code block the result of which will be used to populate the value for the JSON pair
     def tag!(sym, *args, &block)
       method_missing(sym, *args, &block)
     end
@@ -53,7 +52,6 @@ module Jsonify
     # This method will be called if the name does not match an existing method name.
     #
     # @param *args [Array] iterates over the given array yielding each array item to the block; the result of which is added to a JsonArray
-    # see tag!
     def method_missing(sym, *args, &block)
       
       # When no block given, simply add the symbol and arg as key - value for a JsonPair to current

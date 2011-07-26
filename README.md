@@ -13,6 +13,19 @@ Jsonify hooks into Rails ActionView to allow you to create JSON view templates i
 JSON and XML are without a doubt the most common representations used by RESTful applications. Jsonify was built around the notion that these representations belong in the ___view___ layer of the application.
 For XML representations, Rails makes this easy through its support of Builder templates, but, when it comes to JSON, there is no clear approach.
 
+For many applications, particularly those based on legacy database, its not uncommon to expose the data in more client-friendly representations than would be presented by the default Rails `to_json` method.
+Rails does provide control of the emitted via a custom implementation of `as_json`.
+Nevertheless, this forces the developer to place this code into the model when it more rightly belongs in the view.
+
+When someone asks "Where are the model representations defined?", I don't want to have to say "Well, look in the views folder for XML, but you have to look at the code in the model for the JSON format."
+
+There are other good libraries available that help solve this problem, such as Tokamak and RABL, that allow the developer to specify the representation in one format that is then interpreted into the wanted format at runtime.
+Please take a look at these projects when you consider alternatives; however, its my opinion that they are substantial and inherent differences between XML and JSON.
+
+These differences may force the developer make concessions in one format to make the other format correct.
+
+But an even greater motivation for me was emulating the simplicity of Builder. I have not found a single framework for JSON that provides the simplicity and elegance of Builder. Jsonify is my attempt at remedying that situation.
+
 ___more coming soon___
 
 ## Installation
