@@ -1,6 +1,8 @@
 # Jsonify
 
-[Jsonify](https://github.com/bsiggelkow/jsonify) is to JSON as [Builder](https://github.com/jimweirich/builder) is to XML.
+[Jsonify](https://github.com/bsiggelkow/jsonify) -- a builder for JSON <a href="http://travis-ci.org/bsiggelkow/jsonify"><img src="https://secure.travis-ci.org/bsiggelkow/jsonify.png" alt=""></a>
+
+Jsonify is to JSON as [Builder](https://github.com/jimweirich/builder) is to XML.
 
 ## Goal
 
@@ -82,7 +84,7 @@ Results in ...
 
 ### View Templates
 
-Jsonify includes Rails 3 template handler. Rails will handle any template with a ___.jsonify___ extension with Jsonify.
+Jsonify includes Rails 3 template handler. Rails will handle any template with a `.jsonify` extension with Jsonify.
 The Jsonify template handler exposes the `Jsonify::Builder` instance to your template with the `json` variable as in the following example:
 
     json.hello do
@@ -91,11 +93,11 @@ The Jsonify template handler exposes the `Jsonify::Builder` instance to your tem
 
 ## Documentation
 
-[Jsonify Yard Docs](http://rubydoc.info/github/bsiggelkow/jsonify/master/frames)
+[Yard Docs](http://rubydoc.info/github/bsiggelkow/jsonify/master/frames)
 
 ## Build Status
 
-[Compliments of Travis](http://travis-ci.org/bsiggelkow/jsonify)
+[Travis](http://travis-ci.org/bsiggelkow/jsonify)
 
 ## TODOs
 1. Consider simplified means of creating arrays (e.g. json.links(@links) {|link| ...})
