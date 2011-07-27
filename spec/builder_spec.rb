@@ -81,7 +81,7 @@ PRETTY_JSON
       end
       it 'should support the store! message' do
         json.store!( "foo", "bar" ).store!( 'no',  "whar" )
-        json.compile!.should == '{"foo":"bar","no":"whar"}'
+        JSON.parse(json.compile!).should == JSON.parse('{"foo":"bar","no":"whar"}')
       end
     end
   end
