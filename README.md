@@ -86,6 +86,73 @@ The Jsonify template handler exposes the `Jsonify::Builder` instance to your tem
       json.world "Jsonify is Working!"
     end
 
+### Usage Patterns
+
+Jsonify is designed to support construction of an valid JSON representation and
+is entirely based on the [JSON specification](http://json.org).
+
+JSON is built on two fundamental structures: 
+  - a collection of name-value pairs -- in Jsonify this is a `JsonObject`
+  - an ordered list of values -- in Jsonify this is a `JsonArray`
+  
+Jsonify strictly adheres to the JSON specification and provides explicit support 
+for working with these structures. A JSON representation can be either one of the
+two fundamental structures and Jsonify supports both.
+
+### JsonObject
+
+A JSON object -- that is, a collection of name-value pairs, sometimes
+referred to as an ___object literal___, is a natural structure thats familiar
+to most developers. It readily maps to the nested element structured that we see
+in XML. The [JSON RFC](http://www.ietf.org/rfc/rfc4627.txt) states that 
+"the names within an object SHOULD be unique". Jsonify elevates this requirement
+by backing the JsonObject with Hash; an object must have unique keys.
+
+    json.person do # start a new JsonObject where the key is 'foo'
+      json.name 'George Burdell' # add a pair to this object
+      json.skills ['engineering','bombing'] # adds a pair with an array value
+      json.name 'George P. Burdell'
+    end
+
+compiles to ...
+
+    {
+      "person": {
+        "name": "George P. Burdell",
+        "skills": [
+          "engineering",
+          "bombing"
+        ]
+      }
+    }
+
+It's perfectly legitimate for a JSON representation to simply be a collection
+of name-value pairs without a ___root___ element. Jsonify supports this by
+simply allowing you to specify the pairs that make up the object.
+
+    json.location 'Library Coffeehouse'
+    json.neighborhood 'Brookhaven'
+
+compiles to ...
+
+    {
+      "location": "Library Coffeehouse",
+      "neighborhood": "Brookhaven"
+    }
+
+If the ___name___ has space characters ... blah blah ... you can use `tag!`
+
+    json.tag!("my location", 'Library Coffeehouse')
+    json.neighborhood 'Brookhaven'
+
+compiles to ...
+
+    {
+      "my location": "Library Coffeehouse",
+      "neighborhood": "Brookhaven"
+    }
+
+
 ## Documentation
 
 [Yard Docs](http://rubydoc.info/github/bsiggelkow/jsonify/master/frames)
