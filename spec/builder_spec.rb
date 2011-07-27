@@ -63,46 +63,59 @@ PRETTY_JSON
         json.compile!.should == pretty_results.chomp
       end
     end
+    
+    describe 'array creation' do
+      it 'with the append operator (<<)' do
+        json << 1 << 2
+        json.compile!.should == "[1,2]"
+      end
+      it 'with the append! method' do
+        json.append!( 1,2 )
+            .append! 3
+        json.compile!.should == "[1,2,3]"
+      end
+    end
+    describe 'object creation' do
+      it 'should support the element assignment operator( []= )' do
+        json["foo"] = 'bar'
+        json.compile!.should == '{"foo":"bar"}'
+      end
+      it 'should support the store! message' do
+        json.store!( "foo", "bar" )
+            .store!( 'no',  "whar" )
+        json.compile!.should == '{"foo":"bar","no":"whar"}'
+      end
+    end
   end
   
   describe 'arrays' do
     it 'simple array should work' do
-      json.array! do |ary|
-        ary << 1
-        ary << 2
-      end
+      json << 1
+      json << 2
       json.compile!.should == "[1,2]"
     end
     it 'array of arrays should work' do
-      json.array! do |ary|
-        ary << json.array! {|a| a << 1}
-        ary << json.array! {|b| b << 2}
-        ary << 3
-      end
-      json.compile!.should == "[[1],[2],3]"
+      json << [1]
+      json << [2]
+      json << [3]
+      json.compile!.should == "[[1],[2],[3]]"
     end
     it 'array of hashes should work' do
-      json.array! do |ary|
-        ary << {:foo => :bar}
-        ary << {:go  => :far}
-      end
+      json << {:foo => :bar}
+      json << {:go  => :far}
       json.compile!.should == "[{\"foo\":\"bar\"},{\"go\":\"far\"}]"
     end
   end
   
   describe 'objects' do
     it 'simple object should work' do
-      json.object! do |obj|
-        obj.add :foo,:bar
-        obj.add :go, :far
-      end
+      json.foo :bar
+      json.go :far
       json.compile!.should ==  "{\"foo\":\"bar\",\"go\":\"far\"}"
     end
     it 'should handle arrays' do
-      json.object! do |obj|
-        obj.add 1, [2, 3]
-        obj.add 4, 5
-      end
+      json[1] = [2, 3]
+      json[4] = 5
       json.compile!.should ==  '{"1":[2,3],"4":5}'
     end
   end
@@ -136,10 +149,8 @@ PRETTY_JSON
 
     it 'hash with array' do
       json.foo do
-        json.array! do |ary|
-          ary << 1
-          ary << 2
-        end
+        json << 1
+        json << 2
       end
       json.compile!.should == "{\"foo\":[1,2]}"
     end
@@ -153,10 +164,8 @@ PRETTY_JSON
     end
     
     it 'simple array with object' do
-      json.array! do |ary|
-        ary << 1
-        ary << (json.foo 'bar')
-      end
+      json << 1
+      json << {:foo => :bar}
       json.compile!.should == "[1,{\"foo\":\"bar\"}]"
     end
 
@@ -165,10 +174,8 @@ PRETTY_JSON
         json.bar do
           json.baz 'goo'
           json.years do
-            json.array! do |ary|
-              ary << 2011
-              ary << 2012
-            end
+            json << 2011
+            json << 2012
           end
         end
       end
@@ -203,7 +210,7 @@ PRETTY_JSON
         link_class.new('foo.com',     'parent')
       ]
     }
-    it 'should work using array!' do
+    it 'should work using arrays' do
       json.result do
         json.person do
           json.fname 'George'
@@ -216,23 +223,5 @@ PRETTY_JSON
       expected = "{\"result\":{\"person\":{\"fname\":\"George\",\"lname\":\"Burdell\"},\"links\":[{\"href\":\"example.com\",\"rel\":\"self\"},{\"href\":\"foo.com\",\"rel\":\"parent\"}]}}"
       JSON.parse(json.compile!).should == JSON.parse(expected)
     end
-
-    it "should work using map! with argument" do
-      json.result do
-        json.person do
-          json.fname 'George'
-          json.lname 'Burdell'
-        end
-        json.links do
-          json.map!(links) do |link|
-            { :href => link.url, :rel => link.type}
-          end
-        end
-      end
-      expected = "{\"result\":{\"person\":{\"fname\":\"George\",\"lname\":\"Burdell\"},\"links\":[{\"href\":\"example.com\",\"rel\":\"self\"},{\"href\":\"foo.com\",\"rel\":\"parent\"}]}}"
-      JSON.parse(json.compile!).should == JSON.parse(expected)
-    end
   end
-  
-  
 end

@@ -40,43 +40,93 @@ module Jsonify
       @pretty ? JSON.pretty_generate(JSON.parse(result)) : result
     end
     
-    # Adds the value(s) to the current JSON object in the builder's stack.
-    # @param *args values
-    def add!(*args)
-      __current.add *args
+    # Stores the key and value into a JSON object
+    # @param key the key for the pair
+    # @param value the value for the pair
+    # @return self to allow for chaining
+    def store!(key, value=nil)
+      (@stack[@level] ||= JsonObject.new).add(key,value)
+      self
     end
-    
-    alias_method :<<, :add!
 
-    # Adds a new JsonPair to the builder. 
-    # This method will be called if the name does not match an existing method name.
+    alias_method :[]=, :store!
+    
+    # Append -- pushes the given object on the end of a JsonArray.
+    def <<(val)
+      __append(val)
+      self
+    end
+
+    # Append -- pushes the given variable list objects on to the end of the JsonArray 
+    def append!(*args)
+      args.each do |arg| 
+        __append( arg )
+      end
+      self
+    end
+
+    # Adds a new JsonPair to the builder where the key of the pair is set to the method name
+    # (`sym`).
+    # When passed a block, the value of the pair is set to the result of that 
+    # block; otherwise, the value is set to the argument(s) (`args`).
+    #
+    # @example Create an object literal
+    #     json.person do
+    #       json.first_name @person.given_name
+    #       json.last_name @person.surname
+    #     end
+    # 
+    # @example compiles to something like ...
+    #     "person": {
+    #       "first_name": "George",
+    #       "last_name": "Burdell"
+    #     }
+    # 
+    # If a block is given and an argument is passed, the argument it is assumed to be an 
+    # Array (more specifically, an object that responds to `each`). 
+    # The argument is iterated over and each item is yielded to the block.
+    # The result of the block becomes an array item of a JsonArray.
+    #
+    # @example Map an of array of links to an array of JSON objects
+    #     json.links(@links) do |link|
+    #       {:rel => link.first, :href => link.last}
+    #     end
+    # 
+    # @example compiles to something like ...
+    #     "links": [
+    #        {
+    #          "rel": "self",
+    #          "href": "http://example.com/people/123"
+    #        },
+    #        {
+    #          "rel": "school",
+    #          "href": "http://gatech.edu"
+    #        }
+    #     ]
     #
     # @param *args [Array] iterates over the given array yielding each array item to the block; the result of which is added to a JsonArray
     def method_missing(sym, *args, &block)
       
       # When no block given, simply add the symbol and arg as key - value for a JsonPair to current
-      return __current.add( sym, args.length > 1 ? args : args.first ) unless block
+      return __store( sym, args.length > 1 ? args : args.first ) unless block
 
-      # Create a JSON pair and add it to the current object
-      pair = Generate.pair_value(sym) 
-      __current.add(pair)
+      # In a block; create a JSON pair (with no value) and add it to the current object
+      pair = Generate.pair_value(sym)
+      __store pair
 
       # Now process the block
       @level += 1
 
-      unless args.empty?
-        # Argument was given, iterate over it and add result to a JsonArray
-        __set_current JsonArray.new
-        args.first.each do |arg|
-          __current.add block.call(arg)
-        end
+      if args.empty?
+        block.call
       else
-        # No argument was given; ordinary JsonObject is expected
-        block.call(self)
+        args.first.each do |arg|
+          __append block.call(arg)
+        end
       end
 
-      # Set the value on the pair to current
-      pair.value = __current
+      # Set the value on the pair to the object at the top of the stack
+      pair.value = @stack[@level]
 
       # Pop current off the top of the stack; we are done with it at this point
       @stack.pop
@@ -84,69 +134,17 @@ module Jsonify
       @level -= 1
     end
     
-    # Sets the object at the top of the stack to a new JsonObject, which is yielded to the block.
-    def object!
-      __set_current JsonObject.new
-      yield __current
-    end
-    
-    # Sets the object at the top of the stack to a new JsonArray, which is yielded to the block.
-    def array!
-      __set_current JsonArray.new
-      @level += 1
-        yield @stack[@level-1]
-      @level -= 1
-      __current
-    end
-
-    # Maps each element in the given array to a JsonArray. The result of the block becomes an array item of the JsonArray.
-    # @param array array of objects to iterate over.
-    #
-    # @example Map an of array of links to an array of JSON objects
-    #    json.links do
-    #      json.map!(links) do |link|
-    #        {:rel => link.first, :href => link.last}
-    #      end
-    #    end
-    # 
-    # @example compiles to something  like ...
-    #    "links": [
-    #      {
-    #        "rel": "self",
-    #        "href": "http://example.com/people/123"
-    #      },
-    #      {
-    #        "rel": "school",
-    #        "href": "http://gatech.edu"
-    #      }
-    #    ]
-    def map!(array)
-      __set_current JsonArray.new
-      array.each do |item|
-        __current << (yield item)
-      end
-      __current
-    end
-    
-    alias_method :collect!, :map!
-    
     private
     
-    # Inheriting from BlankSlate requires these funky (aka non-idiomatic) method names
+    # BlankSlate requires the __<method> names
 
-    # Current object at the top of the stack. If there is no object there; initializes to a new JsonObject
-    # 
-    # @return [JsonValue] object at the top of the stack
-    def __current
-      @stack[@level] ||= JsonObject.new
+    def __store(key,value=nil)
+      (@stack[@level] ||= JsonObject.new).add(key,value)
+    end  
+
+    def __append(value)
+      (@stack[@level] ||= JsonArray.new).add value
     end
 
-    # Sets the current object at the top of the stack
-    #
-    # @param val object to set at the top of the stack
-    def __set_current(val)
-      @stack[@level] = val
-    end
-    
   end
 end
