@@ -70,8 +70,7 @@ PRETTY_JSON
         json.compile!.should == "[1,2]"
       end
       it 'with the append! method' do
-        json.append!( 1,2 )
-            .append! 3
+        json.append!( 1,2 ).append! 3
         json.compile!.should == "[1,2,3]"
       end
     end
@@ -81,8 +80,7 @@ PRETTY_JSON
         json.compile!.should == '{"foo":"bar"}'
       end
       it 'should support the store! message' do
-        json.store!( "foo", "bar" )
-            .store!( 'no',  "whar" )
+        json.store!( "foo", "bar" ).store!( 'no',  "whar" )
         json.compile!.should == '{"foo":"bar","no":"whar"}'
       end
     end
