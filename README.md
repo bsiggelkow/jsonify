@@ -92,21 +92,21 @@ Jsonify is designed to support construction of an valid JSON representation and
 is entirely based on the [JSON specification](http://json.org).
 
 JSON is built on two fundamental structures: 
-  - a collection of name-value pairs -- in Jsonify this is a `JsonObject`
-  - an ordered list of values -- in Jsonify this is a `JsonArray`
+- a collection of name-value pairs -- in Jsonify this is a `JsonObject`
+- an ordered list of values -- in Jsonify this is a `JsonArray`
   
-Jsonify strictly adheres to the JSON specification and provides explicit support 
-for working with these structures. A JSON representation can be either one of the
-two fundamental structures and Jsonify supports both.
+Jsonify adheres to the JSON specification and provides explicit support 
+for working with these primary structures. At the top most level, a JSON string
+must be one of these structures and Jsonify ensures that this condition is met.
 
-### JsonObject
+#### JSON Objects
 
 A JSON object -- that is, a collection of name-value pairs, sometimes
-referred to as an ___object literal___, is a natural structure thats familiar
-to most developers. It readily maps to the nested element structured that we see
+referred to as an ___object literal___, is a common structure familiar
+to most developers. Its analogous to the nested element structured common
 in XML. The [JSON RFC](http://www.ietf.org/rfc/rfc4627.txt) states that 
-"the names within an object SHOULD be unique". Jsonify elevates this requirement
-by backing the JsonObject with Hash; an object must have unique keys.
+"the names within an object SHOULD be unique". Jsonify elevates this recommendation
+by backing the JsonObject with a `Hash`; an object must have unique keys and the last one in, wins.
 
     json.person do # start a new JsonObject where the key is 'foo'
       json.name 'George Burdell' # add a pair to this object
@@ -152,6 +152,9 @@ compiles to ...
       "neighborhood": "Brookhaven"
     }
 
+#### JSON Arrays
+
+___coming soon_
 
 ## Documentation
 
