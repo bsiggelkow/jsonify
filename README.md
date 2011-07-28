@@ -91,9 +91,10 @@ The Jsonify template handler exposes the `Jsonify::Builder` instance to your tem
 Jsonify is designed to support construction of an valid JSON representation and
 is entirely based on the [JSON specification](http://json.org).
 
-JSON is built on two fundamental structures: 
-- a collection of name-value pairs -- in Jsonify this is a `JsonObject`
-- an ordered list of values -- in Jsonify this is a `JsonArray`
+JSON is built on two fundamental structures:
+
+  * __object__: a collection of name-value pairs -- in Jsonify this is a `JsonObject`
+  * __array__: an ordered list of values -- in Jsonify this is a `JsonArray`
   
 Jsonify adheres to the JSON specification and provides explicit support 
 for working with these primary structures. At the top most level, a JSON string
