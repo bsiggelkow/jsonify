@@ -31,6 +31,12 @@ But an even greater motivation for me was emulating the simplicity of [Builder](
 
 ## Usage
 
+In the examples that follow, the JSON output is usually shown "prettified". Is this only
+for illustration purposes, as the default behavior for Jsonify is not to prettify the output.
+You can enable prettification by passing `:pretty => true` to the Jsonify::Builder constructor; however,
+pretty printing is a relatively costly operation and should not be used in production (unless, of course, you explicitly
+want to show this format).
+
 ### Standalone
     # Create some objects that represent a person and associated hyperlinks
     @person = Struct.new(:first_name,:last_name).new('George','Burdell')
@@ -102,13 +108,14 @@ must be one of these structures and Jsonify ensures that this condition is met.
 
 #### JSON Objects
 
-A JSON object -- that is, a collection of name-value pairs, sometimes
+A JSON object, sometimes
 referred to as an ___object literal___, is a common structure familiar
 to most developers. Its analogous to the nested element structured common
 in XML. The [JSON RFC](http://www.ietf.org/rfc/rfc4627.txt) states that 
 "the names within an object SHOULD be unique". Jsonify elevates this recommendation
 by backing the JsonObject with a `Hash`; an object must have unique keys and the last one in, wins.
 
+    json = Jsonify::Builder.new
     json.person do # start a new JsonObject where the key is 'foo'
       json.name 'George Burdell' # add a pair to this object
       json.skills ['engineering','bombing'] # adds a pair with an array value
@@ -131,6 +138,7 @@ It's perfectly legitimate for a JSON representation to simply be a collection
 of name-value pairs without a ___root___ element. Jsonify supports this by
 simply allowing you to specify the pairs that make up the object.
 
+    json = Jsonify::Builder.new
     json.location 'Library Coffeehouse'
     json.neighborhood 'Brookhaven'
 
@@ -155,7 +163,75 @@ compiles to ...
 
 #### JSON Arrays
 
-___coming soon_
+A JSON array is an ordered list of JSON values. A JSON value can be a simple value,
+like a string or a number, or a supported JavaScript primitive like true, false, or null.
+A JSON value can also be a JSON object or another JSON array. Jsonify strives to make
+this kind of construction possible in a buider-style.
+
+Jsonify supports JSON array construction through two approaches: `method_missing` and `append!`.
+
+##### method_missing
+
+Pass an array and a block to `method_missing` (or `tag!`), and Jsonify will iterate
+over that array, and create a JSON array where each array item is the result of the block.
+If you pass an array that has a length of 5, you will end up with a JSON array that has 5 items.
+That JSON array is then set as the value of the name-value pair, where the name comes from the method name (for `method_missing`)
+or symbol (for `tag!`).
+
+So this construct is really doing two things -- creating a JSON pair, and creating a JSON array as the value of the pair.
+
+    json = Jsonify::Builder.new(:pretty => true)
+    json.letters('a'..'c') do |letter|
+      letter.upcase
+    end
+    
+compiles to ...
+
+    {
+      "letters": [
+        "A",
+        "B",
+        "C"
+      ]
+    }
+
+Another way to handle this particular example is to get rid of the block entirely. 
+Simply pass the array directly &mdash; the result will be the same.
+
+    json.letters ('a'..'c').map(&:upcase)
+
+##### append!
+
+But what if we don't want to start with an object? How do we tell Jsonify to start with an array instead?
+
+You can use `append!` (passing one or more values), or `<<` (which accepts only a single value) to
+the builder and it will assume you are adding values to a JSON array.
+
+    json.append! 'a'.upcase, 'b'.upcase, 'c'.upcase
+
+    [
+      "A",
+      "B",
+      "C"
+    ]
+
+or more idiomatically ...
+
+    json.append! *('a'..'c').map(&:upcase)
+
+The append ___operator___, `<<`, can be used to push a single value into the array:
+
+    json = Jsonify::Builder.new
+    json << 'a'.upcase
+    json << 'b'.upcase
+    json << 'c'.upcase
+    
+Of course, standard iteration works here as well ...
+
+    json = Jsonify::Builder.new
+    ('a'..'c').each do |letter|
+      json << letter.upcase
+    end
 
 ## Documentation
 
@@ -171,6 +247,7 @@ ___coming soon_
 ## TODOs
 1. Benchmark performance
 1. Document how partials can be used
+1. Clean up specs
 
 ## Roadmap
 
