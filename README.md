@@ -1,4 +1,4 @@
-# Jsonify -- a builder for JSON <a href="http://travis-ci.org/bsiggelkow/jsonify"><img src="https://secure.travis-ci.org/bsiggelkow/jsonify.png" alt=""></a>
+# Jsonify -- a builder for JSON [![Build Status](http://travis-ci.org/bsiggelkow/jsonify.png)](http://travis-ci.org/bsiggelkow/jsonify)
 
 [Jsonify](https://github.com/bsiggelkow/jsonify) is to JSON as [Builder](https://github.com/jimweirich/builder) is to XML.
 
@@ -161,6 +161,41 @@ compiles to ...
       "neighborhood": "Brookhaven"
     }
 
+Jsonify also supports a hash-style interface for creating JSON objects.
+
+    json = Jsonify::Builder.new
+    
+    json[:foo] = :bar
+    json[:go]  = :far
+    
+compiles to ...
+
+    {
+      "foo": "bar",
+      "go": "far"
+    }
+
+You can these hash-style methods within a block as well ...
+
+    json.homer do
+      json[:beer] = "Duffs"
+      json[:spouse] = "Marge"
+    end
+
+compiles to ...
+
+    {
+      "homer": {
+        "beer": "Duffs",
+        "spouse": "Marge"
+      }
+    }
+
+If you prefer a more method-based approach, you can use the `store!` method passing it the key and value.
+
+    json.store!(:foo, :bar)
+    json.store!(:go, :far)
+
 #### JSON Arrays
 
 A JSON array is an ordered list of JSON values. A JSON value can be a simple value,
@@ -207,6 +242,7 @@ But what if we don't want to start with an object? How do we tell Jsonify to sta
 You can use `append!` (passing one or more values), or `<<` (which accepts only a single value) to
 the builder and it will assume you are adding values to a JSON array.
 
+    json = Jsonify::Builder.new
     json.append! 'a'.upcase, 'b'.upcase, 'c'.upcase
 
     [
@@ -221,7 +257,6 @@ or more idiomatically ...
 
 The append ___operator___, `<<`, can be used to push a single value into the array:
 
-    json = Jsonify::Builder.new
     json << 'a'.upcase
     json << 'b'.upcase
     json << 'c'.upcase
@@ -233,6 +268,10 @@ Of course, standard iteration works here as well ...
       json << letter.upcase
     end
 
+#### Mixing JSON Arrays and Objects
+
+___coming soon___
+
 ## Documentation
 
 [Yard Docs](http://rubydoc.info/github/bsiggelkow/jsonify/master/frames)
@@ -242,6 +281,7 @@ Of course, standard iteration works here as well ...
 - [Argonaut](https://github.com/jbr/argonaut)
 - [JSON Builder](https://github.com/dewski/json_builder)
 - [RABL](https://github.com/nesquena/rabl)
+- [Representative](https://github.com/mdub/representative)
 - [Tokamak](https://github.com/abril/tokamak)
 
 ## TODOs
@@ -252,7 +292,7 @@ Of course, standard iteration works here as well ...
 ## Roadmap
 
 1. Split Rails template handling into separate gem
-1. Add support for Sinatra and Padrino (maybe separate gems)
+1. Add support for Sinatra and Padrino (Tilt integration?)
 
 ## License
 
