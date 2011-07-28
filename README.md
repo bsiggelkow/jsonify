@@ -140,7 +140,7 @@ compiles to ...
       "neighborhood": "Brookhaven"
     }
 
-If the ___name___ has space characters ... blah blah ... you can use `tag!`
+If the ___name___ you want contains whitespace or other characters not allowed in a Ruby method name, use `tag!`.
 
     json.tag!("my location", 'Library Coffeehouse')
     json.neighborhood 'Brookhaven'
