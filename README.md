@@ -88,11 +88,9 @@ Results in ...
 Jsonify includes Rails 3 template handler. Rails will handle any template with a `.jsonify` extension with Jsonify.
 The Jsonify template handler exposes the `Jsonify::Builder` instance to your template with the `json` variable as in the following example:
 
-```ruby
     json.hello do
       json.world "Jsonify is Working!"
     end
-```
 
 #### Partials
 
