@@ -161,7 +161,8 @@ module Jsonify
     # BlankSlate requires the __<method> names
 
     def __store(key,value=nil)
-      (@stack[@level] ||= JsonObject.new).add(key,value)
+      pair = (JsonPair === key ? key : JsonPair.new(key, value))
+      (@stack[@level] ||= JsonObject.new).add(pair)
     end  
 
     def __append(value)

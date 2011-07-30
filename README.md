@@ -92,6 +92,64 @@ The Jsonify template handler exposes the `Jsonify::Builder` instance to your tem
       json.world "Jsonify is Working!"
     end
 
+#### Partials
+
+You can use partials with Jsonify view templates, but how you use them will 
+depend on how the information they return is structured. An important to keep in
+mind is that a partial, no matter what kind it is, always a returns a string.
+
+##### Jsonify partials
+
+Any Jsonify partial &mdash; that is, the file has a `.jsonify` extension &mdash;
+will return, by design, a string that is valid JSON. It will represent either a JSON object,
+and be wrapped in curly braces ({}), or a JSON array, and be wrapped in square brackets ([]).
+
+To incorporate such a value into a Jsonify template, Jsonify provides the `ingest!` method. 
+
+You can use this method to add JSON, rendered by a partial, to the builder.
+Let's assume this our main template, `index.jsonify`:
+
+    json << 1
+    json.ingest! (render :partial=>'my_partial')
+
+From the first line, you can tell that an array will be created so this line uses the append operator.
+On the second line, a partial is being added to the builder. Note that you cannot simply place `render :parial ...`
+on a line by itself as you can do with other templates like `erb` and `haml`; you have to explicitly tell Jsonify
+to add it.
+
+Let's say that the partial file, `_my_partial.jsonify`, is as follows:
+
+    json << 3
+    json << 4
+
+This `json` variable is a separate instance of the Jsonify::Builder, distinct from the builder instance,
+in the main template. This partial will end up generating the following string:
+
+    "[3,4]"
+
+The `ingest!` method will actually parse this string back into a Jsonify-based object, and add it
+to the builder's current state. The resulting output will be:
+
+    "[1,[3,4]]"
+
+##### Other partials
+
+You can also use output from non-Jsonify templates (e.g. erb); just remember that the output from a template
+is always a string and that you have to tell the builder how to include the result of the partial.
+For example, suppose I have the partial `_today.erb` with the following content:
+
+    <%= Date.today %>
+
+You can then incorporate this partial into your Jsonify template just as you would any other string value:
+
+    json << 1
+    json.ingest! (render :partial=>'my_partial')
+    json << {:date => (render :partial => 'today')}
+
+  renders ...
+  
+    [1,[3,4],{"date":"2011-07-30"}]
+
 ### Usage Patterns
 
 Jsonify is designed to support construction of an valid JSON representation and
@@ -142,7 +200,7 @@ simply allowing you to specify the pairs that make up the object.
     json.location 'Library Coffeehouse'
     json.neighborhood 'Brookhaven'
 
-compiles to ...
+  compiles to ...
 
     {
       "location": "Library Coffeehouse",
@@ -153,8 +211,6 @@ If the ___name___ you want contains whitespace or other characters not allowed i
 
     json.tag!("my location", 'Library Coffeehouse')
     json.neighborhood 'Brookhaven'
-
-compiles to ...
 
     {
       "my location": "Library Coffeehouse",
@@ -168,7 +224,7 @@ Jsonify also supports a hash-style interface for creating JSON objects.
     json[:foo] = :bar
     json[:go]  = :far
     
-compiles to ...
+  compiles to ...
 
     {
       "foo": "bar",
@@ -182,7 +238,7 @@ You can these hash-style methods within a block as well ...
       json[:spouse] = "Marge"
     end
 
-compiles to ...
+  compiles to ...
 
     {
       "homer": {

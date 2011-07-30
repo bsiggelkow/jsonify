@@ -30,7 +30,7 @@ module Jsonify
     end
 
     def add(key, val=nil)
-      pair = (JsonPair === key) ? key : JsonPair.new(key, val)
+      pair = ( JsonPair === key ? key : JsonPair.new(key, val) )
       @values.store(pair.key, pair)
     end
     

@@ -101,7 +101,7 @@ PRETTY_JSON
     it 'array of hashes should work' do
       json << {:foo => :bar}
       json << {:go  => :far}
-      json.compile!.should == "[{\"foo\":\"bar\"},{\"go\":\"far\"}]"
+      json.compile!.should == '[{"foo":"bar"},{"go":"far"}]'
     end
   end
   
@@ -109,7 +109,8 @@ PRETTY_JSON
     it 'simple object should work' do
       json.foo :bar
       json.go :far
-      json.compile!.should ==  "{\"foo\":\"bar\",\"go\":\"far\"}"
+      expected = '{"foo":"bar","go":"far"}'
+      JSON.parse(json.compile!).should ==  JSON.parse(expected)
     end
     it 'should handle arrays' do
       json[1] = [2, 3]
@@ -126,7 +127,8 @@ PRETTY_JSON
           json.tag!('buzz buzz','goo goo')
         end
       end
-      json.compile!.should == "{\"foo foo\":{\"bar bar\":{\"buzz buzz\":\"goo goo\"}}}"
+      expected = '{"foo foo":{"bar bar":{"buzz buzz":"goo goo"}}}'
+      JSON.parse(json.compile!).should == JSON.parse(expected)
     end
 
     it 'complex hash' do
@@ -135,14 +137,14 @@ PRETTY_JSON
           json.baz 'goo'
         end
       end
-      json.compile!.should == "{\"foo\":{\"bar\":{\"baz\":\"goo\"}}}"
+      json.compile!.should == '{"foo":{"bar":{"baz":"goo"}}}'
     end
 
     it 'simple hash' do
       json.foo do
         json.baz :goo
       end
-      json.compile!.should == "{\"foo\":{\"baz\":\"goo\"}}"
+      json.compile!.should == '{"foo":{"baz":"goo"}}'
     end
 
     it 'hash with array' do
@@ -150,7 +152,7 @@ PRETTY_JSON
         json << 1
         json << 2
       end
-      json.compile!.should == "{\"foo\":[1,2]}"
+      json.compile!.should == '{"foo":[1,2]}'
     end
     
     it 'hash with array by iteration' do
@@ -158,13 +160,20 @@ PRETTY_JSON
       json.foo(ary) do |n|
         n * 2
       end 
-      json.compile!.should ==  "{\"foo\":[2,4,6]}"
+      json.compile!.should ==  '{"foo":[2,4,6]}'
     end
     
     it 'simple array with object' do
       json << 1
       json << {:foo => :bar}
-      json.compile!.should == "[1,{\"foo\":\"bar\"}]"
+      json.compile!.should == '[1,{"foo":"bar"}]'
+    end
+    
+    it 'simple array with object via method_missing' do
+      json << 1
+      json << 2
+      json.foo :bar
+      json.compile!.should == "[1,2,{\"foo\":\"bar\"}]"
     end
 
     it 'complex hash with array' do
@@ -224,7 +233,7 @@ PRETTY_JSON
   end
   
   describe 'ingest!' do
-    context 'json object' do
+    context 'a json object' do
       let(:json_string) { '{"my girl":"Friday","my daughter":"Wednesday"}' }
       context 'into' do
         it 'nothing -- should replace it' do
@@ -242,6 +251,26 @@ PRETTY_JSON
           json << 1 << 2
           json.ingest! json_string
           expected = '[1,2,{"my girl":"Friday","my daughter":"Wednesday"}]'
+          JSON.parse(json.compile!).should == JSON.parse(expected)
+        end
+      end
+    end
+    context 'a json array' do
+      let(:json_string) { '[1,2,3]' }
+      context 'into' do
+        it 'nothing -- should replace it' do
+          json.ingest! json_string
+          JSON.parse(json.compile!).should == JSON.parse(json_string)
+        end
+        it 'json object -- should raise error' do
+          json["my boy"] = "Monday"
+          json["my girl"] = "Sunday"
+          lambda{ json.ingest! json_string }.should raise_error( ArgumentError )
+        end
+        it 'json array -- should add' do
+          json << 1 << 2
+          json.ingest! json_string
+          expected = '[1,2,[1,2,3]]'
           JSON.parse(json.compile!).should == JSON.parse(expected)
         end
       end
