@@ -222,4 +222,29 @@ PRETTY_JSON
       JSON.parse(json.compile!).should == JSON.parse(expected)
     end
   end
+  
+  describe 'ingest!' do
+    context 'json object' do
+      let(:json_string) { '{"my girl":"Friday","my daughter":"Wednesday"}' }
+      context 'into' do
+        it 'nothing -- should replace it' do
+          json.ingest! json_string
+          JSON.parse(json.compile!).should == JSON.parse(json_string)
+        end
+        it 'json object -- should merge' do
+          json["my boy"] = "Monday"
+          json["my girl"] = "Sunday"
+          json.ingest! json_string
+          expected = '{"my boy":"Monday","my girl":"Friday","my daughter":"Wednesday"}'
+          JSON.parse(json.compile!).should == JSON.parse(expected)
+        end
+        it 'json array -- should add' do
+          json << 1 << 2
+          json.ingest! json_string
+          expected = '[1,2,{"my girl":"Friday","my daughter":"Wednesday"}]'
+          JSON.parse(json.compile!).should == JSON.parse(expected)
+        end
+      end
+    end
+  end
 end

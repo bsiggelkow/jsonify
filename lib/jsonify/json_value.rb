@@ -33,6 +33,12 @@ module Jsonify
       pair = (JsonPair === key) ? key : JsonPair.new(key, val)
       @values.store(pair.key, pair)
     end
+    
+    def merge(json_object)
+      json_object.values.each do |pair|
+        @values.store(pair.key, pair)
+      end
+    end
 
     alias_method :<<, :add
     alias_method :add!, :add # for consistency with the Builder api

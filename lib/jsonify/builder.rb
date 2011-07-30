@@ -134,6 +134,28 @@ module Jsonify
       @level -= 1
     end
     
+    # Ingest a full JSON representation (either an oject or array)
+    # into the builder. The value is parsed, objectified, and added to the
+    # current value at the top of the stack.
+    #
+    # @param [String] json_string a full JSON string (e.g. from a rendered partial)
+    def ingest!(json_string)
+      return if json_string.empty?
+      res = Jsonify::Generate.value(JSON.parse(json_string))
+      current = @stack[@level]
+      if current.nil?
+        @stack[@level] = res
+      elsif JsonObject === current
+        if JsonObject === res
+          @stack[@level].merge res
+        else 
+          raise ArgumentError.new("Cannot add JSON array to JSON Object")
+        end
+      else # current is JsonArray
+        @stack[@level].add res
+      end
+    end
+
     private
     
     # BlankSlate requires the __<method> names
