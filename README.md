@@ -341,13 +341,13 @@ Here's an example where we start off with an array; but then decide to throw in 
 
 When Jsonify detected that you were trying to add a JSON name-value pair to a JSON array, it converted that pair to a JSON object.
 
-Let's take a look at the inverse approach ... say, we are creating a JSON object; and then decide to an array item ...
+Let's take a look at the inverse approach ... say, we are creating a JSON object; and then decide to add an array item ...
 
     json.foo 'bar'
     json.go  'far'
     json  << 'baz'
 
-In this case, Jsonify decides from the first line that you are creating a JSON object. So, when it gets to the third line, it simply turns the single item ('baz') into a name-value pair with `null` value:
+In this case, Jsonify decides from the first line that you are creating a JSON object. When it gets to the third line, it simply turns the single item ('baz') into a name-value pair with a `null` value:
 
     {"foo":"bar","go":"far","baz":null}
 
