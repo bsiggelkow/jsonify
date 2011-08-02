@@ -1,14 +1,12 @@
 # Jsonify &mdash; a builder for JSON [![Build Status](http://travis-ci.org/bsiggelkow/jsonify.png)](http://travis-ci.org/bsiggelkow/jsonify)
 
 [Jsonify](https://github.com/bsiggelkow/jsonify) is to JSON as [Builder](https://github.com/jimweirich/builder) is to XML. 
-[Jsonify-Rails](https://github.com/bsiggelkow/jsonify-rails) allows you to 
-create Rails views using Jsonify templates.
+
+If you want to use Jsonify for Rails templates, install [Jsonify-Rails](https://github.com/bsiggelkow/jsonify-rails).
 
 ## Goal
 
 Jsonify provides a ___builder___ style engine for creating correct JSON representations of Ruby objects.
-
-[Jsonify-Rails](http://github.com/bsiggelkow/jsonify-rails) hooks into Rails ActionView to allow you to create JSON view templates in much the same way that you can use Builder for XML templates.
 
 ## Motivation
 
@@ -368,12 +366,7 @@ In this case, Jsonify decides from the first line that you are creating a JSON o
 
 ## TODOs
 1. Benchmark performance
-1. Clean up specs
-
-## Roadmap
-
-1. Split Rails template handling into separate gem
-1. Add support for Sinatra and Padrino (Tilt integration?)
+1. Tilt Integration (jsonify-tilt)
 
 ## License
 
