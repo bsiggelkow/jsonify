@@ -1,12 +1,14 @@
 # Jsonify &mdash; a builder for JSON [![Build Status](http://travis-ci.org/bsiggelkow/jsonify.png)](http://travis-ci.org/bsiggelkow/jsonify)
 
-[Jsonify](https://github.com/bsiggelkow/jsonify) is to JSON as [Builder](https://github.com/jimweirich/builder) is to XML.
+[Jsonify](https://github.com/bsiggelkow/jsonify) is to JSON as [Builder](https://github.com/jimweirich/builder) is to XML. 
+[Jsonify-Rails](https://github.com/bsiggelkow/jsonify-rails) allows you to 
+create Rails views using Jsonify templates.
 
 ## Goal
 
 Jsonify provides a ___builder___ style engine for creating correct JSON representations of Ruby objects.
 
-Jsonify hooks into Rails ActionView to allow you to create JSON view templates in much the same way that you can use Builder for XML templates.
+[Jsonify-Rails](http://github.com/bsiggelkow/jsonify-rails) hooks into Rails ActionView to allow you to create JSON view templates in much the same way that you can use Builder for XML templates.
 
 ## Motivation
 
