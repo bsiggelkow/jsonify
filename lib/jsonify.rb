@@ -1,5 +1,5 @@
 require 'json'
-require 'blank_slate'
+require 'jsonify/blank_slate'
 require 'jsonify/version'
 require 'jsonify/json_value'
 require 'jsonify/generate'
