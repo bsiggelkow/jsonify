@@ -14,11 +14,9 @@ Gem::Specification.new do |s|
   s.rubyforge_project = s.name
 
   s.files         = `git ls-files`.split("\n")
-  s.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")
+  s.test_files    = `git ls-files -- {test,spec,performance}/*`.split("\n")
   s.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
   s.require_paths = ["lib"]
-
-  s.add_dependency 'json_pure'
 
   s.add_development_dependency 'bundler'
   s.add_development_dependency 'rake'
