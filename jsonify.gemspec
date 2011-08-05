@@ -18,7 +18,9 @@ Gem::Specification.new do |s|
   s.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
   s.require_paths = ["lib"]
 
-  s.add_development_dependency 'json' # Allow use of user-specified JSON implementation"
+  # 1.9 JSON library built-in
+  s.add_development_dependency 'json' unless RUBY_VERSION =~ /^1.9/
+
   s.add_development_dependency 'bundler'
   s.add_development_dependency 'rake'
   s.add_development_dependency 'rspec'
