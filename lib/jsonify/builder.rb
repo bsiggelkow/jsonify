@@ -35,7 +35,7 @@ module Jsonify
     # @raise [TypeError] only if +:verify+ is set to true
     # @raise [JSON::ParseError] only if +:verify+ is set to true
     def compile!
-      result = (@stack[0] ? @stack[0].evaluate : {}.to_json)
+      result = (@stack[0] || {}).to_json
       JSON.parse(result) if @verify
       @pretty ? JSON.pretty_generate(JSON.parse(result)) : result
     end

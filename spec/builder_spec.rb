@@ -23,7 +23,7 @@ describe Jsonify::Builder do
           attr_accessor :stack
         end
         class FooBar
-          def evaluate
+          def to_json
             "foobar"
           end
         end
