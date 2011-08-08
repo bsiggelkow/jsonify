@@ -1,10 +1,7 @@
-require 'tilt'
-require 'tilt/template'
 
-module Tilt
-   # Builder template implementation. See:
-  # http://builder.rubyforge.org/
-  class JsonifyTemplate < Template
+module Jsonify
+
+  class Template < Tilt::Template
     self.default_mime_type = 'application/json'
 
     def self.engine_initialized?
@@ -37,6 +34,5 @@ module Tilt
       data.to_str
     end
   end
-end
 
-Tilt.register Tilt::JsonifyTemplate, 'jsonify'
+end

@@ -1,7 +1,7 @@
-describe Tilt::JsonifyTemplate do
+describe Jsonify::Template do
   it 'should be associated with .jsonify files' do
     template = Tilt.new('spec/hello_world.jsonify')
-    template.should be_a_kind_of(Tilt::JsonifyTemplate)
+    template.should be_a_kind_of(Jsonify::Template)
   end
   it 'should render the template' do
     template = Tilt.new('spec/hello_world.jsonify')
