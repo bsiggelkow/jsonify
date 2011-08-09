@@ -1,11 +1,31 @@
 module Jsonify
   class Builder < BlankSlate
+    
+    class << self
+
+      def compile( options={} )
+        builder = self.new options
+        yield builder
+        builder.compile!
+      end
+
+      def pretty(&block)
+        compile( :format => :pretty, &block )
+      end
+
+      def plain(&block)
+        compile( :format => :plain, &block )
+      end
+
+    end
 
     # Initializes a new builder. The Jsonify::Builder works by keeping a stack of +JsonValue+s.
     #
     # @param [Hash] options the options to create with
     # @option options [boolean] :verify Builder will verify that the compiled JSON string is parseable;  this option does incur a performance penalty and generally should only be used in development
-    # @option options [symbol] :format Format for the resulstant JSON string; when set to `:pretty`, the JSON string will be output in a prettier format with new lines and indentation; this option does incur a performance penalty and generally should only be used in development
+    # @option options [symbol] :format Format for the resultant JSON string; 
+    #                          `:pretty`, the JSON string will be output in a prettier format with new lines and indentation; this option does incur a performance penalty and generally should only be used in development
+    #                          `:plain`,  no formatting (compact one-line JSON -- best for production)
     def initialize(options={})
       @verify = options[:verify].nil? ? false : options[:verify] 
       @pretty = options[:format].to_s == 'pretty' ? true : false 

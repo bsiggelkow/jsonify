@@ -3,6 +3,33 @@ require 'spec_helper'
 describe Jsonify::Builder do
 
   let(:json) { Jsonify::Builder.new }
+  
+  describe 'class methods' do
+    it '#compile should compile' do
+      Jsonify::Builder.compile do |j|
+        j.foo 'bar'
+      end.should == '{"foo":"bar"}'
+    end
+    it '#pretty should be pretty' do
+      pretty_results = <<PRETTY_JSON
+{
+  "foo": {
+    "bar": "baz"
+  }
+}
+PRETTY_JSON
+      Jsonify::Builder.pretty do |j|
+        j.foo do
+          j.bar 'baz'
+        end
+      end.should == pretty_results.chomp
+    end
+    it '#plain should be plain' do
+      Jsonify::Builder.plain do |j|
+        j.foo 'bar'
+      end.should == '{"foo":"bar"}'
+    end
+  end
 
   describe 'base behavior' do
     describe 'should render empty object on literal' do
