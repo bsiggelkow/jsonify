@@ -49,14 +49,15 @@ want to show this format).
     require 'jsonify'
     json = Jsonify::Builder.new(:pretty => true)
 
-    json.result do
-      json.alumnus do
-        json.fname @person.first_name
-        json.lname @person.last_name
-      end
-      json.links(@links) do |link|
-        {:rel => link.first, :href => link.last}
-      end
+    # Representation of the person
+    json.alumnus do
+      json.fname @person.first_name
+      json.lname @person.last_name
+    end
+
+    # Relevant links
+    json.links(@links) do |link|
+      {:rel => link.first, :href => link.last}
     end
 
     # Evaluate the result to a string
@@ -65,22 +66,20 @@ want to show this format).
 Results in ...
 
     {
-      "result": {
-        "alumnus": {
-          "fname": "George",
-          "lname": "Burdell"
+      "alumnus": {
+        "fname": "George",
+        "lname": "Burdell"
+      },
+      "links": [
+        {
+          "rel": "self",
+          "href": "http://example.com/people/123"
         },
-        "links": [
-          {
-            "rel": "self",
-            "href": "http://example.com/people/123"
-          },
-          {
-            "rel": "school",
-            "href": "http://gatech.edu"
-          }
-        ]
-      }
+        {
+          "rel": "school",
+          "href": "http://gatech.edu"
+        }
+      ]
     }
 
 ### View Templates
