@@ -49,7 +49,7 @@ describe Jsonify::Builder do
         json.compile!.should == non_pretty_results
       end
       it "should be pretty when asked for" do
-        json = Jsonify::Builder.new(:pretty => true)
+        json = Jsonify::Builder.new(:format => :pretty)
         json.foo do
           json.bar 'baz'
         end

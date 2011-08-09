@@ -33,9 +33,9 @@ But an even greater motivation for me was emulating the simplicity of [Builder](
 
 In the examples that follow, the JSON output is usually shown "prettified". Is this only
 for illustration purposes, as the default behavior for Jsonify is not to prettify the output.
-You can enable prettification by passing `:pretty => true` to the Jsonify::Builder constructor; however,
+You can enable prettification by passing `:format => :pretty` to the Jsonify::Builder constructor; however,
 pretty printing is a relatively costly operation and should not be used in production (unless, of course, you explicitly
-want to show this format).
+want to show this format). The default format, `plain`, dictates no special formatting: the result will be rendered as a compact string without any newlines.
 
 ### Standalone
     # Create some objects that represent a person and associated hyperlinks
@@ -47,7 +47,7 @@ want to show this format).
 
     # Build this information as JSON
     require 'jsonify'
-    json = Jsonify::Builder.new(:pretty => true)
+    json = Jsonify::Builder.new(:format => :pretty)
 
     # Representation of the person
     json.alumnus do
@@ -271,7 +271,7 @@ or symbol (for `tag!`).
 
 So this construct is really doing two things -- creating a JSON pair, and creating a JSON array as the value of the pair.
 
-    json = Jsonify::Builder.new(:pretty => true)
+    json = Jsonify::Builder.new(:format => :pretty)
     json.letters('a'..'c') do |letter|
       letter.upcase
     end

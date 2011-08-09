@@ -5,10 +5,10 @@ module Jsonify
     #
     # @param [Hash] options the options to create with
     # @option options [boolean] :verify Builder will verify that the compiled JSON string is parseable;  this option does incur a performance penalty and generally should only be used in development
-    # @option options [pretty] :pretty Builder will output the JSON string in a prettier format with new lines and indentation; this option does incur a performance penalty and generally should only be used in development
+    # @option options [symbol] :format Format for the resulstant JSON string; when set to `:pretty`, the JSON string will be output in a prettier format with new lines and indentation; this option does incur a performance penalty and generally should only be used in development
     def initialize(options={})
       @verify = options[:verify].nil? ? false : options[:verify] 
-      @pretty = options[:pretty].nil? ? false : options[:pretty] 
+      @pretty = options[:format].to_s == 'pretty' ? true : false 
       reset!
     end
     
@@ -29,7 +29,7 @@ module Jsonify
     
     # Compiles the JSON objects into a string representation. 
     # If initialized with +:verify => true+, the compiled result will be verified by attempting to re-parse it using +JSON.parse+.
-    # If initialized with +:pretty => true+, the compiled result will be parsed and regenerated via +JSON.pretty_generate+.
+    # If initialized with +:format => :pretty+, the compiled result will be parsed and regenerated via +JSON.pretty_generate+.
     # This method can be called without any side effects. You can call +compile!+ at any time, and multiple times if desired.
     #
     # @raise [TypeError] only if +:verify+ is set to true
