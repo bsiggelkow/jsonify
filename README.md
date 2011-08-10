@@ -82,6 +82,17 @@ Results in ...
       ]
     }
 
+#### Convenience methods
+Jsonify provides class-level convenience methods that
+save you the trouble of instantiating the `Jsonify::Builder`. Each of these methods accepts a block, yields a new `Builder` object to the block, and then compiles the result.
+
+- `compile`
+  - Compiles the given block; any options are passed the instantiated `Builder`
+- `pretty`
+  - Compiles the given block; results are output in `pretty` format. 
+- `plain`
+  - Compiles the given block; results are output in `plain` (default) format. 
+
 ### View Templates
 
 Jsonify includes a Rails 3 template handler. Any template with a `.jsonify` will be handled by Rails.

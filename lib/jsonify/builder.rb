@@ -3,16 +3,25 @@ module Jsonify
     
     class << self
 
+      # Compiles the given block into a JSON string without having to instantiate a Builder.
+      #
+      # @option options [boolean] :verify Builder will verify that the compiled JSON string is parseable;  this option does incur a performance penalty and generally should only be used in development
+      # @option options [symbol] :format Format for the resultant JSON string; 
+      #                          `:pretty`, the JSON string will be output in a prettier format with new lines and indentation; this option does incur a performance penalty and generally should only be used in development
+      #                          `:plain`,  no formatting (compact one-line JSON -- best for production)
+      # 
       def compile( options={} )
         builder = self.new options
         yield builder
         builder.compile!
       end
 
+      # Compiles the given block into a pretty JSON string without having to instantiate a Builder.
       def pretty(&block)
         compile( :format => :pretty, &block )
       end
 
+      # Compiles the given block into a plain (e.g. no newlines and whitespace) JSON string without having to instantiate a Builder.
       def plain(&block)
         compile( :format => :plain, &block )
       end
