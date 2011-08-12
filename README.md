@@ -93,6 +93,13 @@ save you the trouble of instantiating the `Jsonify::Builder`. Each of these meth
 - `plain`
   - Compiles the given block; results are output in `plain` (default) format. 
 
+For example ...
+
+    Jsonify::Builder.plain do |j|
+      j.song 'Fearless'
+      j.album 'Meddle'
+    end
+
 ### View Templates
 
 Jsonify includes a Rails 3 template handler. Any template with a `.jsonify` will be handled by Rails.
