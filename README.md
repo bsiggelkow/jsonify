@@ -2,7 +2,7 @@
 
 [Jsonify](https://github.com/bsiggelkow/jsonify) is to JSON as [Builder](https://github.com/jimweirich/builder) is to XML. 
 
-If you want to use Jsonify for Rails templates, install [Jsonify-Rails](https://github.com/bsiggelkow/jsonify-rails).
+To use Jsonify for Rails templates, install [Jsonify-Rails](https://github.com/bsiggelkow/jsonify-rails).
 
 ## Goal
 
@@ -100,9 +100,9 @@ For example ...
       j.album 'Meddle'
     end
 
-### View Templates
+### Rails View Templates
 
-Jsonify includes a Rails 3 template handler. Any template with a `.jsonify` will be handled by Rails.
+Jsonify can be used for Rails 3 view templates via the [jsonify-rails](https://github.com/bsiggelkow/jsonify-rails) which includes a Rails 3 template handler. Any template with a `.jsonify` extension will be handled by Rails.
 
 The Jsonify template handler exposes the `Jsonify::Builder` instance to your template with the `json` variable as in the following example:
 
@@ -111,7 +111,7 @@ The Jsonify template handler exposes the `Jsonify::Builder` instance to your tem
     end
     
 Just like with any other template, your Jsonify template will have access to
-any instance variables that are exposed through the controller.
+any instance variables that are exposed through the controller. See [Jsonify-Rails](https://github.com/bsiggelkow/jsonify-rails) for additional details.
 
 #### Partials
 
@@ -168,6 +168,28 @@ You can then incorporate this partial into your Jsonify template just as you wou
   renders ...
   
     [1,{"date":"2011-07-30"}]
+
+### Tilt Integration
+
+Jsonify includes support for [Tilt](http://github.com/rtomayko/tilt). This allow you to create views that use Jsonify with any framework that supports Tilt. Here's an example of a simple [Sinatra](http://sinatrarb.com) application that leverages Jsonify's Tilt integration.
+
+    require 'bundler/setup'
+    require 'sinatra'
+
+    require 'jsonify'
+    require 'jsonify/tilt'
+
+    helpers do
+      def jsonify(*args) render(:jsonify, *args) end
+    end
+
+    get '/' do
+      jsonify :index
+    end
+
+And the corresponding template in `views\index.jsonify`
+
+    json.hello :frank
 
 ### Usage Patterns
 
@@ -380,10 +402,6 @@ In this case, Jsonify decides from the first line that you are creating a JSON o
 - [RABL](https://github.com/nesquena/rabl)
 - [Representative](https://github.com/mdub/representative)
 - [Tokamak](https://github.com/abril/tokamak)
-
-## TODOs
-1. Benchmark performance
-1. Tilt Integration (jsonify-tilt)
 
 ## License
 
