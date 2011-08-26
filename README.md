@@ -1,4 +1,4 @@
-# Jsonify &mdash; a builder for JSON [![Build Status](http://travis-ci.org/bsiggelkow/jsonify.png)](http://travis-ci.org/bsiggelkow/jsonify)
+# Jsonify &mdash; a builder for JSON [![Build Status](https://secure.travis-ci.org/bsiggelkow/jsonify.png)](http://travis-ci.org/bsiggelkow/jsonify)
 
 [Jsonify](https://github.com/bsiggelkow/jsonify) is to JSON as [Builder](https://github.com/jimweirich/builder) is to XML. 
 
