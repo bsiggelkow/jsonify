@@ -142,7 +142,7 @@ PRETTY_JSON
     it 'should handle arrays' do
       json[1] = [2, 3]
       json[4] = 5
-      json.compile!.should ==  '{"1":[2,3],"4":5}'
+      JSON.parse(json.compile!).should ==  JSON.parse('{"1":[2,3],"4":5}')
     end
   end
   
@@ -223,7 +223,8 @@ PRETTY_JSON
     describe 'complex array' do
       it 'should work' do
         json.bar [1,2,{:foo => 'goo'}]
-        json.compile!.should == "{\"bar\":[1,2,{\"foo\":\"goo\"}]}"
+        expected = "{\"bar\":[1,2,{\"foo\":\"goo\"}]}"
+        JSON.parse(json.compile!).should == JSON.parse(expected)
       end
     end
 
