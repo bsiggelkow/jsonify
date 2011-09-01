@@ -52,7 +52,7 @@ module Jsonify
     # @param sym [String] the key for the pair
     # @param *args [arguments] If a block is passed, the first argument will be iterated over and the subsequent result will be added to a JSON array; otherwise, the arguments set value for the `JsonPair`
     # @param &block a code block the result of which will be used to populate the value for the JSON pair
-    def tag!(sym, *args, &block)
+    def tag!(sym, args=nil, &block)
       method_missing(sym, *args, &block)
     end
     
@@ -82,14 +82,16 @@ module Jsonify
     
     # Append -- pushes the given object on the end of a JsonArray.
     def <<(val)
-      __append(val)
+      __array
+      @stack[@level].add val
       self
     end
 
     # Append -- pushes the given variable list objects on to the end of the JsonArray 
     def append!(*args)
+      __array
       args.each do |arg| 
-        __append( arg )
+        @stack[@level].add arg
       end
       self
     end
@@ -134,10 +136,10 @@ module Jsonify
     #     ]
     #
     # @param *args [Array] iterates over the given array yielding each array item to the block; the result of which is added to a JsonArray
-    def method_missing(sym, *args, &block)
+    def method_missing(sym, args=nil, &block)
       
       # When no block given, simply add the symbol and arg as key - value for a JsonPair to current
-      return __store( sym, args.length > 1 ? args : args.first ) unless block
+      return __store( sym, args ) unless block
 
       # In a block; create a JSON pair (with no value) and add it to the current object
       pair = Generate.pair_value(sym)
@@ -146,11 +148,12 @@ module Jsonify
       # Now process the block
       @level += 1
 
-      if args.empty?
+      if args.nil?
         block.call
       else
-        args.first.each do |arg|
-          __append block.call(arg)
+        __array
+        args.each do |arg|
+          @stack[@level].add block.call(arg)
         end
       end
 
@@ -188,14 +191,14 @@ module Jsonify
     private
     
     # BlankSlate requires the __<method> names
-
+    
     def __store(key,value=nil)
       pair = (JsonPair === key ? key : JsonPair.new(key, value))
       (@stack[@level] ||= JsonObject.new).add(pair)
     end  
 
-    def __append(value)
-      (@stack[@level] ||= JsonArray.new).add value
+    def __array
+      @stack[@level] ||= JsonArray.new
     end
 
   end

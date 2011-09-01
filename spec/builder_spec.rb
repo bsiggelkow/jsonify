@@ -189,6 +189,15 @@ PRETTY_JSON
       end 
       json.compile!.should ==  '{"foo":[2,4,6]}'
     end
+
+    it 'hash with empty array by iteration' do
+      ary = []
+      json.foo(ary) do |n|
+        n * 2
+      end
+      expected = '{"foo":[]}'
+      JSON.parse(json.compile!).should ==  JSON.parse(expected)
+    end
     
     it 'simple array with object' do
       json << 1
