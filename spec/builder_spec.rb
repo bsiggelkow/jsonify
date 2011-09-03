@@ -184,21 +184,14 @@ PRETTY_JSON
     
     it 'hash with array by iteration' do
       ary = [1,2,3]
-      json.foo(ary) do |n|
-        n * 2
+      json.foo do
+        ary.each do |n|
+          json << (n * 2)
+        end
       end 
       json.compile!.should ==  '{"foo":[2,4,6]}'
     end
 
-    it 'hash with empty array by iteration' do
-      ary = []
-      json.foo(ary) do |n|
-        n * 2
-      end
-      expected = '{"foo":[]}'
-      JSON.parse(json.compile!).should ==  JSON.parse(expected)
-    end
-    
     it 'simple array with object' do
       json << 1
       json << {:foo => :bar}
@@ -261,7 +254,8 @@ PRETTY_JSON
           json.lname 'Burdell'
         end
         json.links(links) do |link|
-          { :href => link.url, :rel => link.type}
+          json.href link.url
+          json.rel link.type
         end
       end
       expected = "{\"result\":{\"person\":{\"fname\":\"George\",\"lname\":\"Burdell\"},\"links\":[{\"href\":\"example.com\",\"rel\":\"self\"},{\"href\":\"foo.com\",\"rel\":\"parent\"}]}}"
@@ -311,6 +305,25 @@ PRETTY_JSON
           JSON.parse(json.compile!).should == JSON.parse(expected)
         end
       end
+    end
+  end
+
+  describe 'with new array style' do
+    it 'should work' do
+      results =[
+        {:id => 1, :kids => [{:id => 'a'},{:id => 'b'}]},
+        {:id => 2, :kids => [{:id => 'c'},{:id => 'd'}]},
+      ]
+
+      json.results(results) do |result|
+        json.id result[:id]
+        json.children(result[:kids]) do |kid|
+          json.id kid[:id]
+        end
+      end
+      
+      expected = '{"results":[{"id":1,"children":[{"id":"a"},{"id":"b"}]},{"id":2,"children":[{"id":"c"},{"id":"d"}]}]}'
+      JSON.parse(json.compile!).should == JSON.parse(expected)
     end
   end
 end
