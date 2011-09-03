@@ -154,7 +154,7 @@ module Jsonify
         __array
         args.each do |arg|
           @level += 1
-          block.call(arg) #@stack[@level].add block.call(arg)
+          block.call(arg)
           @level -= 1
           @stack[@level].add @stack.pop
         end
