@@ -31,18 +31,38 @@ But an even greater motivation for me was emulating the simplicity of [Builder](
 
 ## Usage
 
-In the examples that follow, the JSON output is usually shown "prettified". Is this only
+In the examples that follow, the JSON output is usually shown "prettified". This is only
 for illustration purposes, as the default behavior for Jsonify is not to prettify the output.
 You can enable prettification by passing `:format => :pretty` to the Jsonify::Builder constructor; however,
 pretty printing is a relatively costly operation and should not be used in production (unless, of course, you explicitly
 want to show this format). The default format, `plain`, dictates no special formatting: the result will be rendered as a compact string without any newlines.
 
+### Compatibility Warning
+
+Starting with version 0.2.0, the handling of arrays has changed to provide a more natural feel. As a consequence, however, code written using earlier versions of Jsonify may not work correctly. The example that follows demonstrates the changes you will need to be make.
+
+Previously, when arrays were processed, you had to put away the builder-style, and use more conventional Rubyisms.
+
+    json.links(@links) do |link|
+      {:rel => link.type, :href => link.url}
+    end
+
+This difference was a frequent stumbling block with users and I wanted to remedy it. The interface for handling arrays is now consistent with the builder-style and should be less surprising to developers. The above snippet is now implemented as:
+
+    json.links(@links) do |link|
+      json.rel link.type
+      json.href link.url
+    end
+
+As always, all feedback is greatly appreciated. I want to know how this new style works out.
+
 ### Standalone
     # Create some objects that represent a person and associated hyperlinks
     @person = Struct.new(:first_name,:last_name).new('George','Burdell')
+    Link = Struct.new(:type, :url)
     @links = [
-      ['self',   'http://example.com/people/123'],
-      ['school', 'http://gatech.edu'],
+      Link.new('self', 'http://example.com/people/123'),
+      Link.new('school', 'http://gatech.edu')
     ]
 
     # Build this information as JSON
@@ -57,7 +77,8 @@ want to show this format). The default format, `plain`, dictates no special form
 
     # Relevant links
     json.links(@links) do |link|
-      {:rel => link.first, :href => link.last}
+      json.rel link.type
+      json.href link.url
     end
 
     # Evaluate the result to a string
@@ -303,20 +324,20 @@ Jsonify supports JSON array construction through two approaches: `method_missing
 
 ##### method_missing
 
-Pass an array and a block to `method_missing` (or `tag!`), and Jsonify will iterate
-over that array, and create a JSON array where each array item is the result of the block.
-If you pass an array that has a length of 5, you will end up with a JSON array that has 5 items.
+Pass an array and a block to `method_missing` (or `tag!`), and Jsonify will create a JSON array. It will then iterate over your array and call the block for each item in the array. Within the block, you use the `json` object to add items to the JSON array.
+
 That JSON array is then set as the value of the name-value pair, where the name comes from the method name (for `method_missing`)
 or symbol (for `tag!`).
 
 So this construct is really doing two things -- creating a JSON pair, and creating a JSON array as the value of the pair.
 
-    json = Jsonify::Builder.new(:format => :pretty)
-    json.letters('a'..'c') do |letter|
-      letter.upcase
+    Jsonify::Builder.pretty do |json|
+      json.letters('a'..'c') do |letter|
+        json << letter.upcase
+      end
     end
     
-compiles to ...
+results in ...
 
     {
       "letters": [
