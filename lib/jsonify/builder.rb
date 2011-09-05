@@ -116,11 +116,12 @@ module Jsonify
     # If a block is given and an argument is passed, the argument it is assumed to be an 
     # Array (more specifically, an object that responds to `each`). 
     # The argument is iterated over and each item is yielded to the block.
-    # The result of the block becomes an array item of a JsonArray.
+    # The result of the block becomes an array item of the JsonArray.
     #
     # @example Map an of array of links to an array of JSON objects
     #     json.links(@links) do |link|
-    #       {:rel => link.first, :href => link.last}
+    #       json.rel link.first
+    #       json.href link.last
     #     end
     # 
     # @example compiles to something like ...
@@ -156,7 +157,16 @@ module Jsonify
           @level += 1
           block.call(arg)
           @level -= 1
-          @stack[@level].add @stack.pop
+          
+          value = @stack.pop
+
+          # If the object created was an array with a single value
+          # assume that just the value should be added
+          if (JsonArray === value && value.values.length <= 1)
+            value = value.values.first
+          end
+
+          @stack[@level].add value
         end
       end
 

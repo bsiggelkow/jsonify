@@ -325,5 +325,13 @@ PRETTY_JSON
       expected = '{"results":[{"id":1,"children":[{"id":"a"},{"id":"b"}]},{"id":2,"children":[{"id":"c"},{"id":"d"}]}]}'
       JSON.parse(json.compile!).should == JSON.parse(expected)
     end
+    it 'simple append' do
+      json.letters('a'..'c') do |letter|
+        json << letter.upcase
+      end
+      expected = '{"letters":["A","B","C"]}'
+      JSON.parse(json.compile!).should == JSON.parse(expected)
+    end
+    
   end
 end
