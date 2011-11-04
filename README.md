@@ -39,7 +39,7 @@ want to show this format). The default format, `plain`, dictates no special form
 
 ### Compatibility Warning
 
-Starting with version 0.2.0, the handling of arrays has changed to provide a more natural feel. As a consequence, however, code written using earlier versions of Jsonify may not work correctly. The example that follows demonstrates the changes you will need to be make.
+Starting with version 0.2.0, the handling of arrays has changed to provide a more natural feel. As a consequence, however, code written using earlier versions of Jsonify may not work correctly. The example that follows demonstrates the changes you need to make.
 
 Previously, when arrays were processed, you had to put away the builder-style, and use more conventional Rubyisms.
 
