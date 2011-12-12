@@ -67,7 +67,7 @@ module Jsonify
     attr_accessor :key, :value
     def initialize(key, value=nil)
       @key = key.to_s
-      @value = Generate.value(value)
+      @value = Generate.value(value.respond_to?(@key) ? value.send(@key) : value)
     end
     def to_json
       %Q{#{key.to_json}:#{value.to_json}}
