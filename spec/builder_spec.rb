@@ -108,7 +108,7 @@ PRETTY_JSON
       end
       it 'should support the store! message' do
         json.store!( "foo", "bar" ).store!( 'no',  "whar" )
-        JSON.parse(json.compile!).should == JSON.parse('{"foo":"bar","no":"whar"}')
+        MultiJson.decode(json.compile!).should == MultiJson.decode('{"foo":"bar","no":"whar"}')
       end
     end
   end
@@ -137,12 +137,12 @@ PRETTY_JSON
       json.foo :bar
       json.go :far
       expected = '{"foo":"bar","go":"far"}'
-      JSON.parse(json.compile!).should ==  JSON.parse(expected)
+      MultiJson.decode(json.compile!).should ==  MultiJson.decode(expected)
     end
     it 'should handle arrays' do
       json[1] = [2, 3]
       json[4] = 5
-      JSON.parse(json.compile!).should ==  JSON.parse('{"1":[2,3],"4":5}')
+      MultiJson.decode(json.compile!).should ==  MultiJson.decode('{"1":[2,3],"4":5}')
     end
   end
   
@@ -155,7 +155,7 @@ PRETTY_JSON
         end
       end
       expected = '{"foo foo":{"bar bar":{"buzz buzz":"goo goo"}}}'
-      JSON.parse(json.compile!).should == JSON.parse(expected)
+      MultiJson.decode(json.compile!).should == MultiJson.decode(expected)
     end
 
     it 'complex hash' do
@@ -216,7 +216,7 @@ PRETTY_JSON
         end
       end
       expected = "{\"foo\":{\"bar\":{\"baz\":\"goo\",\"years\":[2011,2012]}}}"
-      JSON.parse(json.compile!).should == JSON.parse(expected)
+      MultiJson.decode(json.compile!).should == MultiJson.decode(expected)
     end
   end
   
@@ -226,7 +226,7 @@ PRETTY_JSON
       it 'should work' do
         json.bar [1,2,{:foo => 'goo'}]
         expected = "{\"bar\":[1,2,{\"foo\":\"goo\"}]}"
-        JSON.parse(json.compile!).should == JSON.parse(expected)
+        MultiJson.decode(json.compile!).should == MultiJson.decode(expected)
       end
     end
 
@@ -259,7 +259,7 @@ PRETTY_JSON
         end
       end
       expected = "{\"result\":{\"person\":{\"fname\":\"George\",\"lname\":\"Burdell\"},\"links\":[{\"href\":\"example.com\",\"rel\":\"self\"},{\"href\":\"foo.com\",\"rel\":\"parent\"}]}}"
-      JSON.parse(json.compile!).should == JSON.parse(expected)
+      MultiJson.decode(json.compile!).should == MultiJson.decode(expected)
     end
   end
   
@@ -269,20 +269,20 @@ PRETTY_JSON
       context 'into' do
         it 'nothing -- should replace it' do
           json.ingest! json_string
-          JSON.parse(json.compile!).should == JSON.parse(json_string)
+          MultiJson.decode(json.compile!).should == MultiJson.decode(json_string)
         end
         it 'json object -- should merge' do
           json["my boy"] = "Monday"
           json["my girl"] = "Sunday"
           json.ingest! json_string
           expected = '{"my boy":"Monday","my girl":"Friday","my daughter":"Wednesday"}'
-          JSON.parse(json.compile!).should == JSON.parse(expected)
+          MultiJson.decode(json.compile!).should == MultiJson.decode(expected)
         end
         it 'json array -- should add' do
           json << 1 << 2
           json.ingest! json_string
           expected = '[1,2,{"my girl":"Friday","my daughter":"Wednesday"}]'
-          JSON.parse(json.compile!).should == JSON.parse(expected)
+          MultiJson.decode(json.compile!).should == MultiJson.decode(expected)
         end
       end
     end
@@ -291,7 +291,7 @@ PRETTY_JSON
       context 'into' do
         it 'nothing -- should replace it' do
           json.ingest! json_string
-          JSON.parse(json.compile!).should == JSON.parse(json_string)
+          MultiJson.decode(json.compile!).should == MultiJson.decode(json_string)
         end
         it 'json object -- should raise error' do
           json["my boy"] = "Monday"
@@ -302,7 +302,7 @@ PRETTY_JSON
           json << 1 << 2
           json.ingest! json_string
           expected = '[1,2,[1,2,3]]'
-          JSON.parse(json.compile!).should == JSON.parse(expected)
+          MultiJson.decode(json.compile!).should == MultiJson.decode(expected)
         end
       end
     end
@@ -323,14 +323,14 @@ PRETTY_JSON
       end
       
       expected = '{"results":[{"id":1,"children":[{"id":"a"},{"id":"b"}]},{"id":2,"children":[{"id":"c"},{"id":"d"}]}]}'
-      JSON.parse(json.compile!).should == JSON.parse(expected)
+      MultiJson.decode(json.compile!).should == MultiJson.decode(expected)
     end
     it 'simple append' do
       json.letters('a'..'c') do |letter|
         json << letter.upcase
       end
       expected = '{"letters":["A","B","C"]}'
-      JSON.parse(json.compile!).should == JSON.parse(expected)
+      MultiJson.decode(json.compile!).should == MultiJson.decode(expected)
     end
     
   end
