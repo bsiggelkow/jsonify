@@ -19,7 +19,8 @@ Gem::Specification.new do |s|
   s.require_paths = ["lib"]
 
   s.add_runtime_dependency 'multi_json', '~>1.0.4'
-
+  
+  s.add_development_dependency 'json' unless RUBY_VERSION =~ /^1.9/
   s.add_development_dependency 'bundler'
   s.add_development_dependency 'tilt', '~>1.3.2'
   s.add_development_dependency 'rake'

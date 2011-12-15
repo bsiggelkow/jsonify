@@ -1,3 +1,4 @@
+require 'json'
 require 'benchmark'
 require 'bundler'
 require 'bundler/setup'
