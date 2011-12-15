@@ -57,7 +57,7 @@ PRETTY_JSON
 
         json = TestBuilder.new(:verify => true)
         json.stack << FooBar.new
-        lambda{ json.compile! }.should raise_error(JSON::ParserError)
+        lambda{ json.compile! }.should raise_error(MultiJson::DecodeError)
       end
     end
     describe 'unicode characters' do

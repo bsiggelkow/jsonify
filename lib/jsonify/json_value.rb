@@ -1,3 +1,9 @@
+class Object
+  def to_json
+    MultiJson.encode self
+  end
+end
+
 module Jsonify
   class JsonValue
     attr_accessor :values

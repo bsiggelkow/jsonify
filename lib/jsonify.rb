@@ -1,8 +1,4 @@
-begin
-  require 'json'
-rescue LoadError
-  raise "No JSON implementation found. Please install a JSON library of your choosing."
-end
+require 'multi_json'
 require 'jsonify/blank_slate'
 require 'jsonify/version'
 require 'jsonify/json_value'
