@@ -1,5 +1,5 @@
 class Object
-  def to_json
+  def encode_as_json
     MultiJson.encode self
   end
 end
@@ -12,8 +12,8 @@ module Jsonify
       @values = values || []
     end
     
-    def to_json
-      wrap values.map {|v| v.to_json}.join(',')
+    def encode_as_json
+      wrap values.map {|v| v.encode_as_json}.join(',')
     end
     
     def add(jsonValue)
@@ -75,25 +75,25 @@ module Jsonify
       @key = key.to_s
       @value = Generate.value(value)
     end
-    def to_json
-      %Q{#{key.to_json}:#{value.to_json}}
+    def encode_as_json
+      %Q{#{key.encode_as_json}:#{value.encode_as_json}}
     end
   end
 
   class JsonTrue < JsonValue
-    def to_json
+    def encode_as_json
       'true'
     end
   end
   
   class JsonFalse < JsonValue
-    def to_json
+    def encode_as_json
       'false'
     end
   end
   
   class JsonNull < JsonValue
-    def to_json
+    def encode_as_json
       'null'
     end
   end

@@ -64,7 +64,7 @@ module Jsonify
     # @raise [TypeError] only if +:verify+ is set to true
     # @raise [JSON::ParseError] only if +:verify+ is set to true
     def compile!
-      result = (@stack[0] || {}).to_json
+      result = (@stack[0] || {}).encode_as_json
       MultiJson.decode(result) if @verify
       result = MultiJson.encode(MultiJson.decode(result), :pretty => true) if @pretty
       result

@@ -13,7 +13,7 @@ describe Jsonify::Generate do
     json = Jsonify::Generate
     result = json.value links
     expected = '{"links":[{"rel":"foo","href":"goo"},{"rel":"bar","href":"baz"}]}'
-    JSON.parse(result.to_json).should == JSON.parse(expected)
+    MultiJson.decode(result.encode_as_json).should == MultiJson.decode(expected)
   end
 
   describe 'complex example' do
@@ -29,7 +29,7 @@ describe Jsonify::Generate do
         }
       )
       expected = "{\"links\":[{\"rel\":\"foo\",\"href\":\"goo\"},{\"rel\":\"bar\",\"href\":\"baz\"}]}"
-      JSON.parse(json.to_json).should == JSON.parse(expected)
+      MultiJson.decode(json.encode_as_json).should == MultiJson.decode(expected)
     end
   end
 end

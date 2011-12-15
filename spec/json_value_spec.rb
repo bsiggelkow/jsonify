@@ -8,35 +8,35 @@ describe Jsonify::JsonValue do
       pair.key.should == 'key'
     end
     it 'should evaluate to key:value' do
-      pair.to_json.should == "\"key\":\"value\""
+      pair.encode_as_json.should == "\"key\":\"value\""
     end
   end
 
   describe Jsonify::JsonTrue do
     it 'should have a value of true' do
-      Jsonify::JsonTrue.new.to_json.should == 'true'
+      Jsonify::JsonTrue.new.encode_as_json.should == 'true'
     end
   end
 
   describe Jsonify::JsonFalse do
     it 'should have a value of false' do
-      Jsonify::JsonFalse.new.to_json.should == 'false'
+      Jsonify::JsonFalse.new.encode_as_json.should == 'false'
     end
   end
 
   describe Jsonify::JsonNull do
     it 'should have a value of true' do
-      Jsonify::JsonNull.new.to_json.should == 'null'
+      Jsonify::JsonNull.new.encode_as_json.should == 'null'
     end
   end
 
   describe 'strings' do
     it 'should quote the value' do
-      'foo'.to_json.should == "\"foo\""
+      'foo'.encode_as_json.should == "\"foo\""
     end
     it 'should encode unicode' do
       unicode = 'goober'.concat(16)
-      unicode.to_json.should == "\"goober\\u0010\""
+      unicode.encode_as_json.should == "\"goober\\u0010\""
     end
   end
 

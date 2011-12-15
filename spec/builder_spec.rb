@@ -50,7 +50,7 @@ PRETTY_JSON
           attr_accessor :stack
         end
         class FooBar
-          def to_json
+          def encode_as_json
             "foobar"
           end
         end
