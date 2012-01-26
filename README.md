@@ -153,7 +153,7 @@ Let's assume this this is your main template, `index.jsonify`:
     json.ingest! (render :partial=>'my_partial')
 
 From the first line, you can tell that an array will be created as this line uses the append operator.
-On the second line, a partial is being added to the builder. Note that you cannot simply place `render :parial ...` on a line by itself as you can do with other templates like `erb` and `haml`. You have to explicitly tell Jsonify to add it to the builder.
+On the second line, a partial is being added to the builder. Note that you cannot simply place `render :partial ...` on a line by itself as you can do with other templates like `erb` and `haml`. You have to explicitly tell Jsonify to add it to the builder.
 
 Let's say that the partial file, `_my_partial.jsonify`, is as follows:
 
