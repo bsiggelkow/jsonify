@@ -1,3 +1,5 @@
+require 'spec_helper'
+
 describe Jsonify::Template do
   it 'should be associated with .jsonify files' do
     template = Tilt.new('spec/hello_world.jsonify')
