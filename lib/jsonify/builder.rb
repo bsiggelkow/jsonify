@@ -57,16 +57,16 @@ module Jsonify
     end
     
     # Compiles the JSON objects into a string representation. 
-    # If initialized with +:verify => true+, the compiled result will be verified by attempting to re-parse it using +MultiJson.decode+.
-    # If initialized with +:format => :pretty+, the compiled result will be parsed and encoded via +MultiJson.encode(<json>, :pretty => true)+
+    # If initialized with +:verify => true+, the compiled result will be verified by attempting to re-parse it using +MultiJson.load+.
+    # If initialized with +:format => :pretty+, the compiled result will be parsed and encoded via +MultiJson.dump(<json>, :pretty => true)+
     # This method can be called without any side effects. You can call +compile!+ at any time, and multiple times if desired.
     #
     # @raise [TypeError] only if +:verify+ is set to true
     # @raise [JSON::ParseError] only if +:verify+ is set to true
     def compile!
       result = (@stack[0] || {}).encode_as_json
-      MultiJson.decode(result) if @verify
-      result = MultiJson.encode(MultiJson.decode(result), :pretty => true) if @pretty
+      MultiJson.load(result) if @verify
+      result = MultiJson.dump(MultiJson.load(result), :pretty => true) if @pretty
       result
     end
     
@@ -187,7 +187,7 @@ module Jsonify
     # @param [String] json_string a full JSON string (e.g. from a rendered partial)
     def ingest!(json_string)
       return if json_string.empty?
-      res = Jsonify::Generate.value(MultiJson.decode(json_string))
+      res = Jsonify::Generate.value(MultiJson.load(json_string))
       current = @stack[@level]
       if current.nil?
         @stack[@level] = res

@@ -1,6 +1,6 @@
 class Object
   def encode_as_json
-    MultiJson.encode self
+    MultiJson.dump self
   end
 end
 
