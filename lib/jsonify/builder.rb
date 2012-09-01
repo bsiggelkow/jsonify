@@ -106,6 +106,47 @@ module Jsonify
       end
       self
     end
+    
+    # Creates array of json objects in current element from array passed to this method.
+    # Accepts block which yields each array element. 
+    #
+    # @example Create array in root JSON element
+    #     json.array!(@links) do |link|
+    #       json.rel link.first
+    #       json.href link.last
+    #     end
+    # 
+    # @example compiles to something like ...
+    #     [
+    #        {
+    #          "rel": "self",
+    #          "href": "http://example.com/people/123"
+    #        },
+    #        {
+    #          "rel": "school",
+    #          "href": "http://gatech.edu"
+    #        }
+    #     ]
+    #
+    def array!(args)
+      __array
+      args.each do |arg|
+        @level += 1
+        yield arg
+        @level -= 1
+                
+        value = @stack.pop
+      
+        # If the object created was an array with a single value
+        # assume that just the value should be added
+        if (JsonArray === value && value.values.length <= 1)
+          value = value.values.first
+        end
+      
+        @stack[@level].add value
+      end
+    end
+    
 
     # Adds a new JsonPair to the builder where the key of the pair is set to the method name
     # (`sym`).
@@ -163,22 +204,7 @@ module Jsonify
       if args.nil?
         block.call
       else
-        __array
-        args.each do |arg|
-          @level += 1
-          block.call(arg)
-          @level -= 1
-          
-          value = @stack.pop
-
-          # If the object created was an array with a single value
-          # assume that just the value should be added
-          if (JsonArray === value && value.values.length <= 1)
-            value = value.values.first
-          end
-
-          @stack[@level].add value
-        end
+        array!(args, &block)
       end
 
       # Set the value on the pair to the object at the top of the stack
