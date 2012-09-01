@@ -145,7 +145,15 @@ PRETTY_JSON
       MultiJson.load(json.compile!).should ==  MultiJson.load('{"1":[2,3],"4":5}')
     end
   end
-  
+
+  describe "attributes!" do
+    it "should allow create object with attributes of another object" do
+      object = stub(:id => 1, :name => 'foo')
+      json.attributes!(object, :id, :name)
+      MultiJson.load(json.compile!).should == {'id' => 1, 'name' => 'foo'}
+    end
+  end
+
   describe 'using blocks' do
 
     it 'should allow names with spaces using tag!' do

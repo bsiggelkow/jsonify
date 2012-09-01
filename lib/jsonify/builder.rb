@@ -55,8 +55,18 @@ module Jsonify
     def tag!(sym, args=nil, &block)
       method_missing(sym, *args, &block)
     end
-    
-    # Compiles the JSON objects into a string representation. 
+
+    # Adds a new JsonPair for each attribute in attrs by taking attr as key and value of that attribute in object.
+    #
+    # @param object [Object] Object to take values from
+    # @param *attrs [Array<Symbol>] Array of attributes for JsonPair keys
+    def attributes!(object, *attrs)
+      attrs.each do |attr|
+        method_missing attr, object.send(attr)
+      end
+    end
+
+    # Compiles the JSON objects into a string representation.
     # If initialized with +:verify => true+, the compiled result will be verified by attempting to re-parse it using +MultiJson.load+.
     # If initialized with +:format => :pretty+, the compiled result will be parsed and encoded via +MultiJson.dump(<json>, :pretty => true)+
     # This method can be called without any side effects. You can call +compile!+ at any time, and multiple times if desired.
