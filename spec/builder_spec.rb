@@ -332,6 +332,21 @@ PRETTY_JSON
       expected = '{"letters":["A","B","C"]}'
       MultiJson.load(json.compile!).should == MultiJson.load(expected)
     end
-    
+
+  end
+
+  describe 'array!' do
+    it 'allow creating array from root' do
+      json.array!([1, 2, 3]) do |number|
+        json.id number
+        json.times2 number * 2
+      end
+
+      MultiJson.load(json.compile!).should == [
+        {'id' => 1, 'times2' => 2},
+        {'id' => 2, 'times2' => 4},
+        {'id' => 3, 'times2' => 6},
+      ]
+    end
   end
 end
