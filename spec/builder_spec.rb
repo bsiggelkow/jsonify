@@ -148,7 +148,7 @@ PRETTY_JSON
 
   describe "attributes!" do
     it "should allow create object with attributes of another object" do
-      object = stub(:id => 1, :name => 'foo')
+      object = double(:id => 1, :name => 'foo')
       json.attributes!(object, :id, :name)
       MultiJson.load(json.compile!).should == {'id' => 1, 'name' => 'foo'}
     end
