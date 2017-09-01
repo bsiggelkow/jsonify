@@ -31,7 +31,7 @@ There are a number of [related libraries](#related) available that try to solve 
 
 ## Usage
 
-_Note: JSON output is usually shown "prettified" in examples. This is only for illustration purposes, as the Jsonify default is `plain` compact string without newlines. Enable pretty output by passing `:format => :pretty` to the Jsonify::Builder constructor. Keep in mind that pretty printing is a relatively costly operation so use it only when neccessary._
+_Note: JSON output is usually shown "prettified" in examples. This is only for illustration purposes, as the Jsonify default is `plain` compact string without newlines. Enable pretty output by passing `:format => :pretty` to the Jsonify::Builder constructor. Keep in mind that pretty printing is a relatively costly operation so use it only when necessary._
 
 ### Compatibility Warning
 
